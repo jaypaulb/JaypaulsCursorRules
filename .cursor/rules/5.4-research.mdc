@@ -12,91 +12,48 @@ alwaysApply: false
 
 ---
 
-## 0 · Initial Context Gathering
+## 0 · Interactive Discovery Process
 
 **User provides:** Brief project description or problem statement
-**AI responds with:** Strategic questions to understand the core problem
+**AI responds with:** 1-3 strategic questions to understand the core problem
 
-### Discovery Questions Framework
-Ask not more than 20 questions adapting based on responses:
+### Q&A Format Rules
+- **One question at a time** unless asking 2-3 linked questions on the same topic
+- **Maximum 3 questions per response** - more becomes impractical to answer
+- **Each answer influences the next question** - adaptive questioning based on responses
+- **Total limit: 20 questions maximum** for the entire discovery process
+- **Create temporary questions_for_you.md only as last resort** when Q&A format becomes unwieldy
 
-**Problem Definition:**
-- What specific problem are you trying to solve?
-- Who experiences this problem and how often?
-- What happens if this problem isn't solved?
-- How are people currently handling this problem?
-
-**Stakeholder & Users:**
-- Who are the primary users of this solution?
-- Who else will be affected by or interact with this system?
-- Who has decision-making authority on this project?
-- What technical expertise exists on the team?
-
----
-
-## 1 · Scope & Constraints Discovery
-
-**AI asks targeted questions to define project boundaries:**
-
-**Scope Questions:**
-- What are the core features this solution must have?
-- What features would be nice to have but aren't essential?
-- What is explicitly out of scope for this project?
-- How will you know this project is successful?
-
-**Constraint Questions:**
-- What's your timeline for this project?
-- What budget or resource constraints exist?
-- What technical constraints do you have (existing systems, platforms, etc.)?
-- Are there regulatory, security, or compliance requirements?
+### Question Categories (Adaptive Selection)
+Based on user responses, select from these categories:
+- Problem definition and scope
+- Stakeholder and user identification  
+- Technical requirements and constraints
+- Timeline and resource limitations
+- Success criteria and metrics
 
 ---
 
-## 2 · Technical Requirements Deep Dive
+## 1 · Adaptive Questioning Process
 
-**AI explores technical needs through targeted questioning:**
+**AI follows this pattern:**
+1. **Ask 1-3 strategic questions** based on current understanding
+2. **Analyze responses** to determine next question category
+3. **Adapt questioning** based on answers received
+4. **Track question count** (max 20 total)
+5. **Move to synthesis** when sufficient information gathered
 
-**Architecture Questions:**
-- How many users do you expect (now and in 2 years)?
-- What's your tolerance for downtime or performance issues?
-- Do you need real-time features or is eventual consistency okay?
-- What integrations with existing systems are required?
-
-**Technology Preferences:**
-- Do you have preferred programming languages or frameworks?
-- What deployment environment (cloud, on-premise, hybrid)?
-- What's your team's expertise and comfort level?
-- Are there organizational standards you must follow?
-
----
-
-## 3 · Risk & Complexity Assessment
-
-**AI identifies potential challenges through probing questions:**
-
-**Risk Questions:**
-- What's the biggest risk to this project's success?
-- What assumptions are you making that might be wrong?
-- What external dependencies could block progress?
-- What happens if key team members become unavailable?
-
-**Complexity Questions:**
-- What parts of this project seem most challenging?
-- Where do you expect to need external expertise or research?
-- What integration points worry you most?
-- What performance or scale requirements are you unsure about?
+### Question Selection Strategy
+- **Start broad** (problem definition) then narrow down
+- **Follow user's expertise level** - don't ask technical questions to non-technical users
+- **Prioritize based on project type** - web app vs CLI tool vs API
+- **Skip irrelevant categories** based on early responses
 
 ---
 
-## 4 · Validation & Synthesis
+## 2 · Validation & Synthesis
 
 **AI synthesizes all gathered information:**
-
-**Validation Questions:**
-- Based on our discussion, does this summary capture your vision accurately?
-- Are there any critical aspects we haven't covered?
-- What would you change or add to this understanding?
-- Do the priorities and constraints seem realistic?
 
 **Synthesis Process:**
 - AI presents back a structured summary of all gathered information
@@ -104,9 +61,14 @@ Ask not more than 20 questions adapting based on responses:
 - AI identifies any gaps or inconsistencies that need clarification
 - Final validation before moving to documentation phase
 
+**Final Validation Questions (if needed):**
+- Based on our discussion, does this summary capture your vision accurately?
+- Are there any critical aspects we haven't covered?
+- Do the priorities and constraints seem realistic?
+
 ---
 
-## 5 · Final Documentation Generation
+## 3 · Final Documentation Generation
 
 **Only after complete discovery, AI generates comprehensive documentation:**
 

@@ -26,8 +26,19 @@ A comprehensive set of focused, reusable Cursor Rules for rapid development setu
 
 For projects where you want to keep rules synchronized with updates:
 
+**Prerequisites:**
+- Project must be a git repository (`git init` if needed)
+- `.cursor/rules/` directory must not exist or be empty
+
 1. **Add rules as subtree** (one-time setup):
    ```bash
+   # Ensure you're in a git repository
+   git init  # if not already initialized
+   
+   # Remove existing rules if they exist
+   rm -rf .cursor/rules/
+   
+   # Add subtree
    git subtree add --prefix=.cursor/rules https://github.com/jaypaulb/JaypaulsCursorRules.git main --squash
    ```
 
@@ -43,7 +54,6 @@ For projects where you want to keep rules synchronized with updates:
 1. **Clone this repository** to your new project:
    ```bash
    git clone https://github.com/jaypaulb/JaypaulsCursorRules.git
-   cd your-new-project
    cp -r JaypaulsCursorRules/.cursor .
    rm -rf JaypaulsCursorRules  # Clean up
    ```

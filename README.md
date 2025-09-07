@@ -4,11 +4,48 @@ A comprehensive set of focused, reusable Cursor Rules for rapid development setu
 
 ## Quick Start
 
+### Method 1: GitHub Template (Recommended for New Projects)
+
+1. **Use this template** on GitHub:
+   - Click "Use this template" button on the repository page
+   - Create a new repository from the template
+   - Clone your new repository
+
+2. **Copy the rules** to your project:
+   ```bash
+   cp -r JaypaulsCursorRules/.cursor your-project/
+   ```
+
+3. **Select appropriate rules** based on your project type (see Rule Selection Guide below)
+
+4. **Customize frontmatter** in rule files to match your project's file patterns
+
+5. **Start developing** with AI assistance following established standards
+
+### Method 2: Git Subtree (Recommended for Rule Updates)
+
+For projects where you want to keep rules synchronized with updates:
+
+1. **Add rules as subtree** (one-time setup):
+   ```bash
+   git subtree add --prefix=.cursor/rules https://github.com/jaypaulb/JaypaulsCursorRules.git main --squash
+   ```
+
+2. **Update rules** when new versions are available:
+   ```bash
+   git subtree pull --prefix=.cursor/rules https://github.com/jaypaulb/JaypaulsCursorRules.git main --squash
+   ```
+
+3. **Select and customize rules** as needed for your project
+
+### Method 3: Manual Clone (Simple Setup)
+
 1. **Clone this repository** to your new project:
    ```bash
-   git clone https://github.com/yourusername/CursorRules.git
+   git clone https://github.com/jaypaulb/JaypaulsCursorRules.git
    cd your-new-project
-   cp -r CursorRules/.cursor .
+   cp -r JaypaulsCursorRules/.cursor .
+   rm -rf JaypaulsCursorRules  # Clean up
    ```
 
 2. **Select appropriate rules** based on your project type (see Rule Selection Guide below)
@@ -16,6 +53,19 @@ A comprehensive set of focused, reusable Cursor Rules for rapid development setu
 3. **Customize frontmatter** in rule files to match your project's file patterns
 
 4. **Start developing** with AI assistance following established standards
+
+## Deployment Method Comparison
+
+| Method | Best For | Pros | Cons |
+|--------|----------|------|------|
+| **GitHub Template** | New projects, one-time setup | Clean separation, no git history pollution | Manual updates required |
+| **Git Subtree** | Projects needing rule updates | Version controlled, can pull latest changes | More complex setup |
+| **Manual Clone** | Quick setup, simple projects | Simple, no dependencies | No update mechanism |
+
+**Recommendation:**
+- Use **GitHub Template** for most new projects
+- Use **Git Subtree** if you want to keep rules synchronized with updates
+- Use **Manual Clone** for quick prototyping or simple projects
 
 ## Rule Categories
 

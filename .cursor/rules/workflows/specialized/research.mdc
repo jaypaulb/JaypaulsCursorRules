@@ -15,13 +15,14 @@ alwaysApply: false
 ## 0 · Interactive Discovery Process
 
 **User provides:** Brief project description or problem statement
-**AI responds with:** 1-3 strategic questions to understand the core problem
+**AI responds with:** ONE strategic question to understand the core problem
 
-### Q&A Format Rules
-- **One question at a time** unless asking 2-3 linked questions on the same topic
-- **Maximum 3 questions per response** - more becomes impractical to answer
-- **Each answer influences the next question** - adaptive questioning based on responses
+### Q&A Format Rules (STRICT)
+- **ONE question at a time** - Never ask multiple questions in a single response
+- **Wait for answer before proceeding** - Log each answer and incorporate into context
+- **Each answer influences the next question** - Adaptive questioning based on all previous responses
 - **Total limit: 20 questions maximum** for the entire discovery process
+- **Track question count** - Stop at 20 questions and move to synthesis phase
 
 ### Question Categories (Adaptive Selection)
 Based on user responses, select from these categories:
@@ -33,18 +34,35 @@ Based on user responses, select from these categories:
 
 ## 1 · Adaptive Questioning Process
 
-**AI follows this pattern:**
-1. **Ask 1-3 strategic questions** based on current understanding
-2. **Analyze responses** to determine next question category
-3. **Adapt questioning** based on answers received
-4. **Track question count** (max 20 total)
-5. **Move to synthesis** when sufficient information gathered
+**AI follows this pattern (STRICT):**
+1. **Ask ONE strategic question** based on current understanding and all previous answers
+2. **Wait for user's answer** - Do not proceed until answer is received
+3. **Log the answer** - Incorporate answer into context for next question
+4. **Analyze all accumulated responses** to determine next question category
+5. **Adapt questioning** based on complete answer history
+6. **Track question count** (max 20 total) - Increment after each question
+7. **Move to synthesis** when sufficient information gathered OR question limit reached
+
+### Answer Logging & Context Building
+**After each answer is received:**
+1. **Log the answer** - Record the question number, question text, and user's answer
+2. **Update context** - Add answer to accumulated knowledge base
+3. **Identify gaps** - Determine what information is still missing
+4. **Formulate next question** - Use all previous answers to craft the next strategic question
+5. **Avoid repetition** - Don't ask questions already answered or implied by previous answers
+
+**Context accumulation example:**
+- Question 1: "What problem are you trying to solve?" → Answer logged
+- Question 2: Uses Answer 1 to ask about target users
+- Question 3: Uses Answers 1+2 to ask about technical constraints
+- Continue building on all previous answers
 
 ### Question Selection Strategy
 - **Start broad** (problem definition) then narrow down
 - **Follow user's expertise level** - don't ask technical questions to non-technical users
 - **Prioritize based on project type** - web app vs CLI tool vs API
 - **Skip irrelevant categories** based on early responses
+- **Build on previous answers** - Each question should reference or build upon earlier responses
 
 ## 2 · Validation & Synthesis
 

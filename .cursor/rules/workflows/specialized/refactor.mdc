@@ -33,7 +33,9 @@ alwaysApply: false
 
 ## 4 · Execution & Implementation
 - **Read before write; reread after write.**
-- Use command-wrapper mandate: `timeout 30s <command> 2>&1 | cat`
+- Use command execution patterns (see `core/command-execution.mdc`):
+  - Self-terminating commands: `<command> 2>&1 | cat`
+  - Non-terminating commands: `timeout <duration> <command> 2>&1 | cat`
 - Use non-interactive flags (`-y`, `--yes`, `--force`) when safe.
 - **Never create unsolicited `.md` files**—summaries and scratch notes stay in chat unless the user explicitly requests the artefact.
 

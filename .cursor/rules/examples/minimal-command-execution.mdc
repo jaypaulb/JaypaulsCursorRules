@@ -1,14 +1,22 @@
 ---
-description: Command execution patterns. Use timeout, error handling, and validation for all command executions. Apply when executing shell commands or running scripts.
+description: Command execution patterns. Use timeout for commands that don't self-terminate. All commands require error handling and validation. Apply when executing shell commands or running scripts.
 alwaysApply: false
 ---
 
 # Command Execution Standards
 
+> **Note**: See `core/command-execution.mdc` for complete guidelines. This is a minimal example.
+
 ## Core Pattern
-All executed commands must use:
+
+**Commands That Self-Terminate** (most commands):
 ```bash
-timeout 30s <command> 2>&1 | cat
+<command> 2>&1 | cat
+```
+
+**Commands That Don't Self-Terminate** (log tailing, watch, interactive):
+```bash
+timeout <duration> <command> 2>&1 | cat
 ```
 
 ## Requirements
@@ -17,5 +25,17 @@ timeout 30s <command> 2>&1 | cat
 - Validate command outputs before proceeding
 - Always check exit codes
 - Capture stderr with `2>&1`
-- Use timeout to prevent hanging
+- **Use timeout only for commands that don't self-terminate**
 - Pipe to `cat` to prevent paging
+
+## Examples
+
+**Self-Terminating:**
+```bash
+git status 2>&1 | cat
+```
+
+**Non-Terminating (needs timeout):**
+```bash
+timeout 30s docker logs --tail 100 -f container_name 2>&1 | cat
+```

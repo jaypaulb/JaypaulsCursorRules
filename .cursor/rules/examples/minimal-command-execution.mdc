@@ -1,0 +1,21 @@
+---
+description: Command execution patterns. Use timeout, error handling, and validation for all command executions. Apply when executing shell commands or running scripts.
+alwaysApply: false
+---
+
+# Command Execution Standards
+
+## Core Pattern
+All executed commands must use:
+```bash
+timeout 30s <command> 2>&1 | cat
+```
+
+## Requirements
+- Use non-interactive flags (`-y`, `--yes`) where safe
+- Use non-paging flags where safe
+- Validate command outputs before proceeding
+- Always check exit codes
+- Capture stderr with `2>&1`
+- Use timeout to prevent hanging
+- Pipe to `cat` to prevent paging

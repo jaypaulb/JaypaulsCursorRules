@@ -34,10 +34,10 @@ For projects where you want to keep rules synchronized with updates:
    ```bash
    # Ensure you're in a git repository
    git init  # if not already initialized
-   
+
    # Remove existing rules if they exist
    rm -rf .cursor/rules/
-   
+
    # Add subtree
    git subtree add --prefix=.cursor/rules https://github.com/jaypaulb/JaypaulsCursorRules.git main --squash
    ```
@@ -93,18 +93,50 @@ For projects where you want to keep rules synchronized with updates:
 - **3.2 background-agent-workflow.mdc**: Autonomous agent behavior for unattended tasks
 
 ### 4. Language-Specific Standards
-- **4.1 python-standards.mdc**: Python development best practices
-- **4.2 golang-standards.mdc**: Go development standards and patterns
-- **4.3 mern-standards.mdc**: MERN stack (MongoDB, Express, React, Node.js) guidelines
+- **4.1 python-standards.mdc**: Python development best practices (legacy - see `languages/python.mdc`)
+- **4.2 golang-standards.mdc**: Go development standards and patterns (legacy - see `languages/golang.mdc`)
+- **4.3 mern-standards.mdc**: MERN stack (MongoDB, Express, React, Node.js) guidelines (legacy - see `languages/mern.mdc`)
+- **4.4 cpp-standards.mdc**: C++ development standards (legacy - see `languages/cpp.mdc`)
+
+**New Atomic Structure** (`.cursor/rules-atomic/`):
+- **languages/python.mdc**: Python with TDD patterns and atomic design
+- **languages/golang.mdc**: Go with TDD patterns and atomic design
+- **languages/mern.mdc**: MERN with TDD patterns and atomic design
+- **languages/cpp.mdc**: C++ with TDD patterns and atomic design
+- **languages/flutter.mdc**: Flutter/Dart development (NEW)
+- **languages/canvus.mdc**: Canvus API development, language-agnostic (NEW)
 
 ### 5. Specialized Development Workflows
-- **5.1 refactor.mdc**: Guidelines for large-scale code refactoring
-- **5.2 refresh.mdc**: Bug hunting and problem-solving approaches
-- **5.3 reflect.mdc**: Post-development analysis and rule refinement
+- **5.1 refactor.mdc**: Guidelines for large-scale code refactoring (legacy - see `workflows/specialized/refactor.mdc`)
+- **5.2 refresh.mdc**: Bug hunting and problem-solving approaches (legacy - see `workflows/specialized/refresh.mdc`)
+- **5.3 reflect.mdc**: Post-development analysis and rule refinement (legacy - see `workflows/specialized/reflect.mdc`)
+- **5.4 research.mdc**: Project inception and research methodology (legacy - see `workflows/specialized/research.mdc`)
+
+**New Atomic Structure** (`.cursor/rules-atomic/`):
+- All workflow rules include TDD methodology
+- All rules enforce atomic design principles
+- Token-optimized structure
 
 ## Rule Selection Guide
 
-### For Python Projects
+> **Note**: The new atomic structure (`.cursor/rules-atomic/`) is recommended. See `RULE_SELECTION_GUIDE.md` in the atomic rules directory for detailed selection guidance.
+
+### For Python Projects (New Atomic Structure)
+
+**Automatically Applied:**
+- All core rules (always-apply): command-execution, file-operations, quality-gates, error-handling, naming-conventions, tdd-methodology, code-structure
+- `languages/python.mdc` (when editing `.py` files)
+- `project/tasks.mdc` (when editing `TASKS.md`)
+- `project/project-management.mdc` (when editing `README.md`, `PRD.md`, `CHANGELOG.md`)
+- `workflows/local-agent-workflow.mdc` (always-apply)
+
+**Key Features:**
+- ✅ TDD methodology enforced (tests before implementation)
+- ✅ Atomic design structure (atoms → molecules → organisms)
+- ✅ Token-optimized (~728-928 tokens per call)
+- ✅ No duplication between rules
+
+### For Python Projects (Legacy Structure)
 ```
 ✅ 1.1 core.mdc (always apply)
 ✅ 1.2 dev-env.mdc
@@ -115,37 +147,44 @@ For projects where you want to keep rules synchronized with updates:
 ⚠️ 3.1 local-agent-workflow.mdc (if working with AI agents)
 ```
 
-### For Go Projects
-```
-✅ 1.1 core.mdc (always apply)
-✅ 1.2 dev-env.mdc
-✅ 4.2 golang-standards.mdc
-✅ 2.1 project-management.mdc
-✅ 2.2 tasks-sop.mdc
-✅ 2.3 issues-sop.mdc
-⚠️ 3.1 local-agent-workflow.mdc (if working with AI agents)
-```
+### For Go Projects (New Atomic Structure)
 
-### For MERN Stack Projects
-```
-✅ 1.1 core.mdc (always apply)
-✅ 1.2 dev-env.mdc
-✅ 4.3 mern-standards.mdc
-✅ 2.1 project-management.mdc
-✅ 2.2 tasks-sop.mdc
-✅ 2.3 issues-sop.mdc
-⚠️ 3.1 local-agent-workflow.mdc (if working with AI agents)
-```
+**Automatically Applied:**
+- All core rules (always-apply)
+- `languages/golang.mdc` (when editing `.go` files)
+- `project/tasks.mdc` (when editing `TASKS.md`)
+- `workflows/local-agent-workflow.mdc` (always-apply)
 
-### For Background Agent Projects
-```
-✅ 1.1 core.mdc (always apply)
-✅ 1.2 dev-env.mdc
-✅ 3.2 background-agent-workflow.mdc
-✅ 2.2 tasks-sop.mdc
-✅ 2.3 issues-sop.mdc
-⚠️ 4.x Language-specific rule based on project
-```
+**Key Features:**
+- ✅ Go-specific TDD patterns (cargo test, table-driven tests)
+- ✅ Atomic design with Go package structure
+- ✅ Interface-based composition
+
+### For MERN Stack Projects (New Atomic Structure)
+
+**Automatically Applied:**
+- All core rules (always-apply)
+- `languages/mern.mdc` (when editing `.js`, `.jsx`, `.ts`, `.tsx` files)
+- `project/tasks.mdc` (when editing `TASKS.md`)
+- `workflows/local-agent-workflow.mdc` (always-apply)
+
+**Key Features:**
+- ✅ React + Express TDD patterns (Jest, React Testing Library)
+- ✅ Atomic design for both frontend and backend
+- ✅ TypeScript type safety
+
+### For Background Agent Projects (New Atomic Structure)
+
+**Automatically Applied:**
+- All core rules (always-apply)
+- `workflows/background-agent-workflow.mdc` (for autonomous operation)
+- `project/tasks.mdc` (when editing `TASKS.md`)
+- Language-specific rule based on file types
+
+**Key Features:**
+- ✅ Multi-agent coordination
+- ✅ Autonomous task selection
+- ✅ TDD enforcement in autonomous mode
 
 ## Rule Structure
 
@@ -218,9 +257,17 @@ Use **background-agent-workflow.mdc** for unattended AI agents working through t
 ### Rule Validation
 Each rule is designed to be:
 - **Actionable**: Contains specific, executable instructions
-- **Focused**: Addresses one primary concern (~100 lines max)
+- **Focused**: Addresses one primary concern (~25-200 lines, optimized for tokens)
 - **Measurable**: Includes clear success criteria
 - **Reusable**: Works across different projects of the same type
+- **TDD-Enforced**: Test-Driven Development methodology integrated
+- **Atomic Design**: Code structure follows atoms → molecules → organisms hierarchy
+
+### Token Optimization
+- **Always-apply rules**: ~728 tokens (validated)
+- **Context-specific rules**: ~100-200 tokens (when globs match)
+- **Total per call**: ~728-928 tokens (well under 1,000 limit)
+- **Strategy**: Minimal core rules, context-specific rules only when needed
 
 ### Testing Rules
 Validate rules by:

@@ -27,7 +27,7 @@ alwaysApply: false
 ### Question Categories (Adaptive Selection)
 Based on user responses, select from these categories:
 - Problem definition and scope
-- Stakeholder and user identification  
+- Stakeholder and user identification
 - Technical requirements and constraints
 - Timeline and resource limitations
 - Success criteria and metrics

@@ -1,0 +1,108 @@
+---
+description: Project inception, research, and design methodology for greenfield projects. Interactive discovery process, adaptive questioning, validation, synthesis, and documentation generation. Apply when starting a new project from scratch.
+globs: docs/PRD.md,docs/TECH_STACK.md,docs/TASKS.md
+alwaysApply: false
+---
+
+# Research & Design Methodology
+
+> **Note**: Assumes core rules (file operations) and project rules are already loaded.
+
+> **Invoke when starting a new project from scratch with brief context.**
+> AI acts as strategic consultant, asking targeted questions to extract project requirements.
+> Documentation (PRD, TECH_STACK, TASKS) is produced only at the final stage.
+
+## 0 · Interactive Discovery Process
+
+**User provides:** Brief project description or problem statement
+**AI responds with:** 1-3 strategic questions to understand the core problem
+
+### Q&A Format Rules
+- **One question at a time** unless asking 2-3 linked questions on the same topic
+- **Maximum 3 questions per response** - more becomes impractical to answer
+- **Each answer influences the next question** - adaptive questioning based on responses
+- **Total limit: 20 questions maximum** for the entire discovery process
+
+### Question Categories (Adaptive Selection)
+Based on user responses, select from these categories:
+- Problem definition and scope
+- Stakeholder and user identification
+- Technical requirements and constraints
+- Timeline and resource limitations
+- Success criteria and metrics
+
+## 1 · Adaptive Questioning Process
+
+**AI follows this pattern:**
+1. **Ask 1-3 strategic questions** based on current understanding
+2. **Analyze responses** to determine next question category
+3. **Adapt questioning** based on answers received
+4. **Track question count** (max 20 total)
+5. **Move to synthesis** when sufficient information gathered
+
+### Question Selection Strategy
+- **Start broad** (problem definition) then narrow down
+- **Follow user's expertise level** - don't ask technical questions to non-technical users
+- **Prioritize based on project type** - web app vs CLI tool vs API
+- **Skip irrelevant categories** based on early responses
+
+## 2 · Validation & Synthesis
+
+**AI synthesizes all gathered information:**
+- AI presents back a structured summary of all gathered information
+- User confirms, corrects, or expands on any points
+- AI identifies any gaps or inconsistencies that need clarification
+- Final validation before moving to documentation phase
+
+## 3 · Final Documentation Generation
+
+**Only after complete discovery, AI generates comprehensive documentation:**
+
+### Core Documentation Suite
+Create comprehensive documentation in `docs/` folder:
+
+#### PRD.md (Product Requirements Document)
+- Problem Statement
+- Goals & Success Metrics
+- User Personas & Use Cases
+- Functional Requirements
+- Non-Functional Requirements
+- Constraints & Assumptions
+- Out of Scope
+
+#### TECH_STACK.md
+- Architecture Overview
+- Technology Choices (Frontend, Backend, Database, Infrastructure)
+- Architecture Decision Records (ADR format)
+
+#### TASKS.md
+- Phase 1: Foundation
+- Phase 2: Core Features
+- Phase 3: Integration & Testing
+- Phase 4: Deployment & Launch
+
+## 4 · Quality Gates & Deliverables
+
+### Phase Completion Criteria
+- [ ] Problem is clearly defined and validated
+- [ ] Requirements are documented and prioritized
+- [ ] Technology stack decisions are made and documented
+- [ ] Project tasks are broken down and estimated
+- [ ] Risks are identified with mitigation plans
+- [ ] Success metrics are defined and measurable
+
+### Documentation Quality Checklist
+- [ ] All documents follow consistent format and style
+- [ ] Cross-references between documents are accurate
+- [ ] Decisions include rationale and alternatives considered
+- [ ] Requirements are testable and measurable
+- [ ] Assumptions are clearly stated and validated
+- [ ] Documents are stored in proper `docs/` structure
+
+## 5 · Transition to Development
+- **Handoff preparation** — Ensure all documentation is complete and accessible.
+- **Development environment setup** — Prepare tools, repositories, and CI/CD pipelines.
+- **Team alignment** — Brief development team on decisions and rationale.
+- **First sprint planning** — Select initial tasks and establish development rhythm.
+
+> **Next Phase:** Move to active development following task management and development standards.

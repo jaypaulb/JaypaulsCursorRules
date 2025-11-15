@@ -23,6 +23,7 @@ alwaysApply: false
 - **Each answer influences the next question** - Adaptive questioning based on all previous responses
 - **Total limit: 20 questions maximum** for the entire discovery process
 - **Track question count** - Stop at 20 questions and move to synthesis phase
+- **Provide context for options** - When presenting choices, explain each option with pros/cons and highlight recommended choice (see "Question Formatting & Option Presentation" below)
 
 ### Question Categories (Adaptive Selection)
 Based on user responses, select from these categories:
@@ -57,12 +58,61 @@ Based on user responses, select from these categories:
 - Question 3: Uses Answers 1+2 to ask about technical constraints
 - Continue building on all previous answers
 
+### Question Formatting & Option Presentation
+
+**When presenting questions with options (CRITICAL):**
+
+1. **Provide sufficient context** - Explain what each option means in non-technical terms
+2. **List options in order of preference** - Most recommended option first
+3. **Highlight preferred option** - Clearly indicate which option is recommended and why
+4. **Explain pros/cons** - For each option, provide:
+   - What it is (simple explanation)
+   - Advantages (why you might choose it)
+   - Disadvantages (why you might not)
+   - Best use cases (when it's ideal)
+5. **Make it accessible** - Non-technical users should be able to make an informed decision
+
+**Example of GOOD question format:**
+
+```
+Question 1 of up to 20:
+
+What technology stack should we use for the Windows desktop application with a tabbed GUI?
+
+**Recommended: Python (PyQt/PySide)**
+- What it is: Python is a programming language with GUI libraries
+- Pros: Easy to learn, cross-platform, large community, rapid development
+- Cons: Slightly slower than native apps, larger file size
+- Best for: Quick development, cross-platform needs, teams familiar with Python
+
+**Alternative 1: C# (WPF)**
+- What it is: Microsoft's native Windows framework
+- Pros: Native performance, excellent Windows integration, modern UI capabilities
+- Cons: Windows-only, requires .NET framework, steeper learning curve
+- Best for: Windows-only apps, maximum performance, enterprise applications
+
+**Alternative 2: Electron**
+- What it is: Web technologies (HTML/CSS/JavaScript) packaged as desktop app
+- Pros: Web developers can contribute, modern UI, cross-platform
+- Cons: Large file size, higher memory usage, slower startup
+- Best for: Teams with web expertise, apps needing web-like interfaces
+
+Please choose one and briefly explain why, or suggest another option.
+```
+
+**Example of BAD question format (DO NOT USE):**
+- ❌ Just listing options without explanation
+- ❌ No context about what each option means
+- ❌ No indication of preference or recommendation
+- ❌ Technical jargon without explanation
+
 ### Question Selection Strategy
 - **Start broad** (problem definition) then narrow down
 - **Follow user's expertise level** - don't ask technical questions to non-technical users
 - **Prioritize based on project type** - web app vs CLI tool vs API
 - **Skip irrelevant categories** based on early responses
 - **Build on previous answers** - Each question should reference or build upon earlier responses
+- **Provide context for all options** - Never present options without sufficient explanation
 
 ## 2 · Validation & Synthesis
 

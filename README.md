@@ -38,13 +38,25 @@ For projects where you want to keep rules synchronized with updates:
    # Remove existing rules if they exist
    rm -rf .cursor/rules/
 
-   # Add subtree
-   git subtree add --prefix=.cursor/rules https://github.com/jaypaulb/JaypaulsCursorRules.git main --squash
+   # Add subtree (note: repository root contains .cursor/rules/, so we add to project root)
+   git subtree add --prefix=.cursor https://github.com/jaypaulb/JaypaulsCursorRules.git main --squash
+
+   # If you get nested .cursor/rules/.cursor/rules/, fix it:
+   if [ -d ".cursor/rules/.cursor" ]; then
+     mv .cursor/rules/.cursor/rules/* .cursor/rules/ 2>/dev/null || true
+     rm -rf .cursor/rules/.cursor
+   fi
    ```
 
 2. **Update rules** when new versions are available:
    ```bash
-   git subtree pull --prefix=.cursor/rules https://github.com/jaypaulb/JaypaulsCursorRules.git main --squash
+   git subtree pull --prefix=.cursor https://github.com/jaypaulb/JaypaulsCursorRules.git main --squash
+
+   # If you get nested .cursor/rules/.cursor/rules/, fix it:
+   if [ -d ".cursor/rules/.cursor" ]; then
+     mv .cursor/rules/.cursor/rules/* .cursor/rules/ 2>/dev/null || true
+     rm -rf .cursor/rules/.cursor
+   fi
    ```
 
 3. **Select and customize rules** as needed for your project

@@ -1,343 +1,311 @@
 ---
-description: Master IDE rule - Essential development principles that apply to all projects. This rule works standalone and provides core guidance even when the full rules folder doesn't exist.
+description: Master IDE rule - Essential development principles that apply to all projects. Provides core guidance for autonomous AI development, atomic design structure, TDD methodology, security standards, and tool usage patterns. Optimized for LLM consumption with clear directives and actionable guidelines.
 alwaysApply: true
 ---
 
 # Master IDE Rule - Essential Development Principles
 
-> **Note**: This is a standalone master rule that provides essential development principles. For complete rule sets, see `.cursor/rules/` directory.
+> **Note**: This is a standalone master rule optimized for LLM consumption. Always-applied rule providing core development standards. For complete rule sets, see `.cursor/rules/` directory.
 
-## Core Principles
+## Core Behavioral Principles
 
-### 1. Atomic Design Structure
+### Proactive Development & Action
+- **Act Autonomously**: Proceed with implementing tasks defined in development plans. Create files, write code, modify existing code and project structure to achieve objectives without step-by-step instructions.
+- **Prioritize Action**: Complete defined tasks efficiently. Do not require step-by-step instructions for minor actions.
+- **Make Necessary Changes**: Write and modify code as required by development tasks.
+- **Confirm Before Deletion**: Explicitly ask for and receive user confirmation before deleting files or substantial blocks of code.
 
-Structure all code following this hierarchy:
+### Accuracy and Relevance
+- Responses and actions must directly address user requests and current development task.
+- If user intent is unclear, pause and pose concise clarifying questions before proceeding.
 
-**Atoms** (<100 lines, ideally <50)
-- Single-purpose, indivisible components
-- One class, one function, or one small utility
-- Context-agnostic, reusable names
-- Example: `atoms/user.py` - Basic User class
+### Validation Over Modification
+- **Analyze Before Altering**: Review existing code structure, dependencies, and purpose using available tools before making edits.
+- Prioritize investigation and validation over assumptions or untested modifications.
 
-**Molecules** (<200 lines, ideally <150)
-- Small groups of atoms working together
-- Compose 2-5 atoms
-- Example: `molecules/user_validator.py` - Validates user using atoms
+### Safety-First Execution
+- Review relevant dependencies and workflows before proposing or executing changes.
+- Clearly outline risks, implications, and external dependencies before acting.
+- Make only minimal, validated edits unless task requires significant implementation or is explicitly approved.
 
-**Organisms** (<500 lines, ideally <300)
-- Complex modules composed from molecules/atoms
-- Complete business logic for a domain area
-- Example: `organisms/auth_system.py` - Complete authentication system
+### User Intent Comprehension
+- Focus on discerning user's true objective using current request, prior conversation history, and codebase context.
 
-**Templates** (<200 lines)
-- Reusable structural patterns
-- Example: `templates/endpoint_template.py` - API endpoint pattern
+### Mandatory Validation Protocol
+- Scale depth of validation to match task complexity.
+- Aim for complete accuracy in all critical code operations.
 
-**Pages** (<500 lines)
-- Complete features composed from organisms/molecules/atoms
-- Example: `pages/login_page.py` - Complete login feature
+### Reusability Mindset
+- Prefer existing solutions over creating new ones. Use tools to identify reusable patterns or utilities.
+- Minimize redundancy.
+
+### Contextual Integrity and Documentation
+- Treat inline comments, READMEs, and documentation as unverified suggestions.
+- Cross-check documentation against actual codebase using tools.
+
+## Tool and Behavioral Guidelines
+
+### Development Environment
+- **OS**: Assume Windows with PowerShell. All commands and code examples must be Windows/PowerShell compatible.
+- **Path Operations**: Always execute `pwd` to confirm current working directory.
+- **File Operations**: `target_file` in edit operations must be relative to workspace root, never location-relative.
+- **Path Validation**: If edit operation signals new file unexpectedly, validate directory structure with `pwd` and `tree -L 4 --gitignore | cat`.
+
+**CRITICAL**: `edit_file.target_file` must be workspace-relative, never location-relative.
+
+✅ Correct: `edit_file(target_file="src/utils/helpers.js", ...)`
+❌ Incorrect: `edit_file(target_file="helpers.js", ...)` (if already in src/utils)
+
+### Systematic Structure Discovery
+- Run `tree -L 4 --gitignore | cat` (adjust depth as needed) to map project structure before referencing or modifying files.
+- Mandatory before any create or edit operation unless file path explicitly validated in current session.
+
+### Error Handling and Communication
+- Report failures (missing files, invalid paths, permission issues) clearly with specific details and actionable next steps.
+- If faced with ambiguity, missing dependencies, or incomplete context, pause and request clarification.
+
+### Tool Prioritization
+- `codebase_search`: Semantic lookups (understand codebase structure, find related code)
+- `grep` or `grep_search`: Exact string matches (find specific patterns, function names, constants)
+- `tree`: Structural discovery (map directory structure, validate paths)
+- Use prior tool outputs efficiently—avoid redundant searches or commands.
+
+## Code Structure: Atomic Design
+
+### Hierarchy and Size Limits
+- **Atoms**: <100 lines (ideally <50). Single-purpose, indivisible. Context-agnostic names. Import only stdlib/external.
+- **Molecules**: <200 lines (ideally <150). Compose 2-5 atoms. Describe composition.
+- **Organisms**: <500 lines (ideally <300). Compose molecules/atoms. Complete business logic.
+- **Templates**: <200 lines. Reusable patterns.
+- **Pages**: <500 lines. Complete features from organisms/molecules/atoms.
 
 ### Directory Structure
-
 ```
 src/
-├── atoms/          # Basic building blocks (<100 lines each)
-├── molecules/      # Composed components (<200 lines each)
-├── organisms/      # Complex modules (<500 lines each)
-├── templates/     # Reusable patterns (<200 lines each)
-└── pages/         # Complete features (<500 lines each)
+├── atoms/          # <100 lines each
+├── molecules/      # <200 lines each
+├── organisms/      # <500 lines each
+├── templates/     # <200 lines each
+└── pages/         # <500 lines each
 
 tests/
-├── atoms/          # Unit tests for atoms
-├── molecules/      # Integration tests for molecules
-├── organisms/      # System tests for organisms
-└── pages/          # E2E tests for pages
+├── atoms/          # Unit tests
+├── molecules/      # Integration tests
+├── organisms/      # System tests
+└── pages/          # E2E tests
 ```
 
 ### Composition Rules
-
-- **Atoms**: Import only standard library or external dependencies
-- **Molecules**: Import atoms and compose them
-- **Organisms**: Import molecules and/or atoms
-- **Pages**: Import organisms, molecules, and atoms as needed
-- Prefer composition over inheritance
-- Keep import depth shallow
-- Avoid circular dependencies
-
-## 2. Test-Driven Development (TDD)
-
-### Red-Green-Refactor Cycle
-
-1. **Red**: Write failing test first
-   - Describe desired behavior in test
-   - Test must fail (proves it tests something)
-   - Run test to confirm it fails
-
-2. **Green**: Write minimal code to pass
-   - Just enough to make test pass
-   - No premature optimization
-   - Run test to confirm it passes
-
-3. **Refactor**: Improve code quality
-   - Improve while keeping tests green
-   - Remove duplication
-   - Improve readability
-   - Run tests frequently
-
-### Test Requirements
-
-- **Write tests first** - Before implementation code
-- **Tests must fail first** - Proves they test something
-- **One test per behavior** - Focused, single responsibility
-- **Descriptive test names** - Clear what is being tested
-- **Fast execution** - Tests should run quickly
-- **Isolated** - Tests should not depend on each other
-- **Repeatable** - Same results every time
-
-### Test Coverage
-
-- **Minimum coverage**: >80% for all code
-- **Critical paths**: 100% coverage
-- **Public APIs**: 100% coverage
-- **Edge cases**: Must be tested (zero values, empty states, nulls)
-- **Error conditions**: All error paths tested
-
-### Test Structure (Mirrors Source)
-
-- **Atoms**: Unit tests - test individual functions/classes in isolation
-- **Molecules**: Integration tests - test composed components (2-5 atoms)
-- **Organisms**: System tests - test complex modules (multiple molecules)
-- **Pages**: E2E tests - test complete features
-
-## 3. Quality Gates
-
-### Universal Requirements
-
-- ✅ **TDD followed**: Tests written before implementation (Red-Green-Refactor)
-- ✅ **Tests pass**: All tests must pass before completion
-- ✅ **Test coverage**: >80% coverage (100% for critical paths and public APIs)
-- ✅ **Test structure**: Tests follow atomic design hierarchy
-- ✅ Linting passes
-- ✅ Type checking passes (if applicable)
-- ✅ Security scans pass
-- ✅ No secrets in code
-- ✅ Documentation updated
-
-### Pre-Commit Validation
-
-All changes must pass quality gates before:
-- Marking tasks complete
-- Creating merge requests
-- Closing issues
-
-## 4. Code Structure Standards
+- Atoms: Import only stdlib/external.
+- Molecules: Import atoms.
+- Organisms: Import molecules/atoms.
+- Pages: Import organisms/molecules/atoms.
+- Prefer composition over inheritance.
+- Keep import depth shallow.
+- Avoid circular dependencies.
 
 ### File Size Enforcement
+Before creating file: [ ] Small and focused? [ ] Single responsibility? [ ] Can be broken down? [ ] Appropriate hierarchy level?
+If exceeds limit: Split into atoms → create molecules → build organisms. Never create large monolithic files.
 
-**Before Creating a File:**
-- [ ] Is this file small and focused? (Check size limits above)
-- [ ] Does it have a single, clear responsibility?
-- [ ] Can it be broken down into smaller atoms/molecules?
-- [ ] Is it at the appropriate hierarchy level?
+## Test-Driven Development (TDD)
 
-**If File Exceeds Size Limit:**
-- Split into atoms: Extract basic building blocks
-- Create molecules: Compose atoms into focused components
-- Build organisms: Compose molecules into complex modules
-- Never create large monolithic files
+### Red-Green-Refactor Cycle
+1. **Red**: Write failing test first. Test must fail. Run to confirm failure.
+2. **Green**: Write minimal code to pass. No premature optimization. Run to confirm pass.
+3. **Refactor**: Improve code quality while keeping tests green. Remove duplication. Improve readability.
 
-## 5. Security Standards
+### Test Requirements
+- Write tests first (before implementation).
+- Tests must fail first (proves they test something).
+- One test per behavior (focused, single responsibility).
+- Descriptive test names.
+- Fast execution.
+- Isolated (no dependencies between tests).
+- Repeatable.
+
+### Test Coverage
+- Minimum: >80% for all code.
+- Critical paths: 100% coverage.
+- Public APIs: 100% coverage.
+- Edge cases: Must test (zero values, empty states, nulls).
+- Error conditions: All error paths tested.
+
+### Test Structure (Mirrors Source)
+- Atoms: Unit tests (isolated).
+- Molecules: Integration tests (2-5 atoms).
+- Organisms: System tests (multiple molecules).
+- Pages: E2E tests (complete features).
+
+## Quality Gates
+
+### Universal Requirements
+- [ ] TDD followed (tests before implementation).
+- [ ] Tests pass.
+- [ ] Test coverage >80% (100% for critical paths/public APIs).
+- [ ] Test structure follows atomic design hierarchy.
+- [ ] Linting passes.
+- [ ] Type checking passes (if applicable).
+- [ ] Security scans pass.
+- [ ] No secrets in code.
+- [ ] Documentation updated.
+
+### Pre-Commit Validation
+All changes must pass quality gates before: marking tasks complete, creating merge requests, closing issues.
+
+## Security Standards
 
 ### Secret Management
-
-- ❌ **Never** commit API keys, passwords, tokens, or credentials
-- ❌ **Never** hardcode secrets in source code
-- ✅ **Always** use environment variables for secrets
-- ✅ **Always** use secure storage solutions (secret managers, vaults)
-- ✅ **Always** validate that secrets are not in code before committing
+- ❌ Never commit API keys, passwords, tokens, credentials.
+- ❌ Never hardcode secrets in source code.
+- ✅ Always use environment variables for secrets.
+- ✅ Always use secure storage (secret managers, vaults).
+- ✅ Always validate secrets not in code before committing.
 
 ### OWASP Top 10 Prevention
-
-1. **Broken Access Control**: Implement proper authentication and authorization
-2. **Cryptographic Failures**: Use strong algorithms, HTTPS/TLS, hash passwords
-3. **Injection**: Use parameterized queries, validate and sanitize inputs
-4. **Insecure Design**: Design with security in mind from the start
-5. **Security Misconfiguration**: Use secure defaults, remove unnecessary features
-6. **Vulnerable Components**: Keep dependencies updated, scan for vulnerabilities
-7. **Authentication Failures**: Strong passwords, MFA, secure session management
-8. **Software and Data Integrity**: Verify dependencies, validate data integrity
-9. **Security Logging Failures**: Log security events, protect logs, don't log secrets
-10. **Server-Side Request Forgery**: Validate URLs, use allowlists
+1. Broken Access Control: Proper authentication/authorization.
+2. Cryptographic Failures: Strong algorithms, HTTPS/TLS, hash passwords.
+3. Injection: Parameterized queries, validate/sanitize inputs.
+4. Insecure Design: Design with security in mind.
+5. Security Misconfiguration: Secure defaults, remove unnecessary features.
+6. Vulnerable Components: Keep dependencies updated, scan vulnerabilities.
+7. Authentication Failures: Strong passwords, MFA, secure sessions.
+8. Software/Data Integrity: Verify dependencies, validate data integrity.
+9. Security Logging Failures: Log security events, protect logs, don't log secrets.
+10. Server-Side Request Forgery: Validate URLs, use allowlists.
 
 ### Secure Coding Practices
+- Validate all inputs (type, format, range, length).
+- Sanitize inputs before processing.
+- Encode outputs to prevent XSS.
+- Don't expose sensitive information in errors.
+- Use HTTPS/TLS for all external communications.
+- Implement proper error handling (no secrets in logs).
 
-- Validate all inputs (type, format, range, length)
-- Sanitize inputs before processing
-- Encode outputs to prevent XSS
-- Don't expose sensitive information in errors
-- Use HTTPS/TLS for all external communications
-- Implement proper error handling (no secrets in logs)
-
-## 6. Error Handling
-
-### Core Principles
-
-- Implement comprehensive error handling
-- Use custom exception classes for domain-specific errors
-- Log errors appropriately (exclude sensitive data)
-- Return meaningful error messages to users
-- Never expose sensitive data in errors
-
-### Error Handling Checklist
-
-- [ ] All external calls wrapped in try/catch
-- [ ] Custom exceptions for domain errors
-- [ ] Sensitive data excluded from logs
-- [ ] User-friendly error messages
-- [ ] Proper error propagation
-- [ ] Error recovery strategies where appropriate
-
-## 7. Naming Conventions
+## Error Handling
 
 ### Core Principles
+- Implement comprehensive error handling.
+- Use custom exception classes for domain-specific errors.
+- Log errors appropriately (exclude sensitive data).
+- Return meaningful error messages to users.
+- Never expose sensitive data in errors.
 
-- **Context-agnostic**: Name by structure/function, not context
-- **Consistent**: Use same patterns across codebase
-- **Descriptive**: Names should clearly indicate purpose
-- **Conventional**: Follow language-specific conventions
+### Checklist
+- [ ] All external calls wrapped in try/catch.
+- [ ] Custom exceptions for domain errors.
+- [ ] Sensitive data excluded from logs.
+- [ ] User-friendly error messages.
+- [ ] Proper error propagation.
+- [ ] Error recovery strategies where appropriate.
+
+## Naming Conventions
+
+### Core Principles
+- Context-agnostic: Name by structure/function, not context.
+- Consistent: Use same patterns across codebase.
+- Descriptive: Names clearly indicate purpose.
+- Conventional: Follow language-specific conventions.
 
 ### Atomic Design Naming
-
-- **Atoms**: Context-agnostic, reusable names (e.g., `user.py`, `validator.py`)
-- **Molecules**: Describe the composition (e.g., `user_validator.py`, `auth_form.py`)
-- **Organisms**: Describe the domain (e.g., `auth_system.py`, `user_service.py`)
-- **Templates**: Pattern names (e.g., `endpoint_template.py`)
-- **Pages**: Feature names (e.g., `login_page.py`)
+- Atoms: Context-agnostic, reusable (e.g., `user.py`, `validator.py`).
+- Molecules: Describe composition (e.g., `user_validator.py`, `auth_form.py`).
+- Organisms: Describe domain (e.g., `auth_system.py`, `user_service.py`).
+- Templates: Pattern names (e.g., `endpoint_template.py`).
+- Pages: Feature names (e.g., `login_page.py`).
 
 ### Variable/Function Naming
+- Use language-appropriate conventions.
+- Be descriptive: `userCount` not `uc`.
+- Avoid abbreviations unless widely understood.
+- Use constants for magic numbers/strings.
 
-- Use language-appropriate conventions
-- Be descriptive: `userCount` not `uc`
-- Avoid abbreviations unless widely understood
-- Use constants for magic numbers/strings
-
-## 8. Documentation Standards
+## Documentation Standards
 
 ### Code Documentation
+- Docstrings for all public functions/classes.
+- Inline comments for complex logic.
+- API documentation for public APIs.
+- README with project structure and setup.
 
-- Docstrings for all public functions/classes
-- Inline comments for complex logic
-- API documentation for public APIs
-- README with project structure and setup
+### Checklist
+- [ ] All public functions/classes documented.
+- [ ] README updated with setup instructions.
+- [ ] API documentation generated (if applicable).
+- [ ] Examples provided for complex features.
+- [ ] Architecture decisions documented.
 
-### Documentation Checklist
-
-- [ ] All public functions/classes documented
-- [ ] README updated with setup instructions
-- [ ] API documentation generated (if applicable)
-- [ ] Examples provided for complex features
-- [ ] Architecture decisions documented
-
-## 9. Command Execution
+## Command Execution
 
 ### Core Pattern
-
-**Commands That Self-Terminate** (most commands):
-```bash
-<command> 2>&1 | cat
-```
-
-**Commands That Don't Self-Terminate** (log tailing, watch, interactive):
-```bash
-timeout <duration> <command> 2>&1 | cat
-```
+**Self-Terminating** (most commands): `<command> 2>&1 | cat`
+**Non-Terminating** (log tailing, watch, interactive): `timeout <duration> <command> 2>&1 | cat`
 
 ### Timeout Guidelines
+Use timeout only for: commands that run indefinitely (e.g., `log --tail`, `watch`), may hang (interactive, network requests), need safety limit (long-running operations).
 
-Use timeout only for commands that:
-- Run indefinitely (e.g., `log --tail`, `watch`)
-- May hang (e.g., interactive commands, network requests)
-- Need a safety limit (e.g., long-running operations)
-
-**Timeout Duration Examples:**
-- Log tailing/monitoring: `timeout 30s` or `timeout 60s`
-- Long-running operations: `timeout 300s` (5 minutes)
-- Interactive commands: `timeout 30s`
-- Network requests: `timeout 30s`
+**Duration Examples**: Log tailing/monitoring: `timeout 30s` or `timeout 60s`. Long-running: `timeout 300s` (5 minutes). Interactive: `timeout 30s`. Network: `timeout 30s`.
 
 ### Requirements
-
-- Use non-interactive flags (`-y`, `--yes`) where safe
-- Use non-paging flags where safe
-- Validate command outputs before proceeding
-- Always check exit codes
-- Capture stderr with `2>&1`
-- **Use timeout only for commands that don't self-terminate**
-- Pipe to `cat` to prevent paging
+- Use non-interactive flags (`-y`, `--yes`) where safe.
+- Use non-paging flags where safe.
+- Validate command outputs before proceeding.
+- Always check exit codes.
+- Capture stderr with `2>&1`.
+- Use timeout only for commands that don't self-terminate.
+- Pipe to `cat` to prevent paging.
 
 ### Examples
+**Self-Terminating**: `git status 2>&1 | cat`
+**Non-Terminating**: `timeout 30s docker logs --tail 100 -f container_name 2>&1 | cat`
 
-**Self-Terminating** (no timeout needed):
-```bash
-git status 2>&1 | cat
-```
-
-**Non-Terminating** (timeout required):
-```bash
-timeout 30s docker logs --tail 100 -f container_name 2>&1 | cat
-```
-
-## 10. File Operations
+## File Operations
 
 ### Read Before Write
-
-- Always read files before modifying them
-- Re-read after changes to verify integrity
-- Check file existence and permissions before operations
+- Always read files before modifying.
+- Re-read after changes to verify integrity.
+- Check file existence and permissions before operations.
 
 ### Path Validation
+- Use workspace-relative paths (not location-relative).
+- Always confirm working directory with `pwd`.
+- Validate target directory exists before writing.
 
-- Use workspace-relative paths (not location-relative)
-- Always confirm working directory with `pwd`
-- Validate target directory exists before writing
+## Conventional Commits
 
-## Best Practices Summary
+Conventional Commits standardize commit messages to be parseable by tools, driving automated versioning and changelogs. Precision in commit messages is critical for clarity and automation.
 
-✅ **Do's:**
-- Write tests before implementation (TDD)
-- Keep files small and focused (atomic design)
-- Use environment variables for secrets
-- Validate all inputs
-- Document public APIs
-- Follow language-specific conventions
-- Compose from smaller pieces
-- Run quality gates before completion
+### Structure
+Format: `<type>(<scope>): <description>`
+- `type`: Change intent (feat, fix, etc.).
+- `scope` (optional): Affected area (auth, ui, etc.).
+- `description`: Concise, imperative summary.
+- Optional body: Additional details.
+- Optional footer: BREAKING CHANGE or issue references.
 
-❌ **Don'ts:**
-- Don't commit secrets
-- Don't create large monolithic files
-- Don't skip tests
-- Don't expose sensitive data in errors
-- Don't duplicate code (compose instead)
-- Don't write implementation before tests
-- Don't skip quality gates
+### Key Types
+These types align with semantic-release defaults (Angular convention):
+- `feat`: New feature (minor version bump). Example: `feat(ui): add dark mode toggle`
+- `fix`: Bug fix (patch version bump). Example: `fix(api): correct rate limit error`
+- `BREAKING CHANGE`: Breaking change (major version bump). Indicate with `!` after type or in footer.
+- Non-releasing: `docs:`, `style:`, `refactor:`, `perf:`, `test:`, `build:`, `ci:`, `chore:`.
+
+### Guidelines
+- Be specific: Use scopes.
+- Keep concise: Subject line < 50 characters.
+- Trigger intentionally: Use feat, fix, or breaking changes only when release desired.
+- Avoid ambiguity: Write imperative, actionable descriptions.
+- Document breaking changes: Always flag explicitly.
 
 ## Quick Reference
 
-**Atomic Design Hierarchy:**
-- Atoms → Molecules → Organisms → Templates → Pages
-- Size limits: 100 → 200 → 500 → 200 → 500 lines
-
-**TDD Cycle:**
-- Red (failing test) → Green (passing code) → Refactor (improve)
-
-**Quality Gates:**
-- TDD followed, tests pass, >80% coverage, linting, security, documentation
-
-**Security:**
-- No secrets in code, validate inputs, use HTTPS, keep dependencies updated
+**Atomic Design**: Atoms (<100) → Molecules (<200) → Organisms (<500) → Templates (<200) → Pages (<500)
+**TDD Cycle**: Red (failing test) → Green (passing code) → Refactor (improve)
+**Quality Gates**: TDD, tests pass, >80% coverage, linting, security, documentation
+**Security**: No secrets, validate inputs, HTTPS, updated dependencies
+**Commands**: Self-terminating: `<cmd> 2>&1 | cat`. Non-terminating: `timeout <dur> <cmd> 2>&1 | cat`
+**Paths**: Always workspace-relative. Validate with `pwd` and `tree -L 4 --gitignore | cat`
 
 ---
 
 > **For complete rule sets**: See `.cursor/rules/` directory for language-specific rules, workflow rules, and detailed guidelines.
-

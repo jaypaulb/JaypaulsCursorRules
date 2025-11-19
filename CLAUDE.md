@@ -1,18 +1,24 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with this repository.
 
 ## Project Overview
 
-**AgentStandards** is a comprehensive standards and rules management system for AI-assisted development. It provides:
+**llm-dev-rules** is a comprehensive development standards repository that provides:
 
-- **Modular Cursor IDE rules** for consistent development across different languages and frameworks
-- **Multi-agent orchestration system** for autonomous feature development (`.claude/` directory)
-- **Reusable development standards** as Claude Code skills and subagents
+- **Cursor IDE rules** (`.cursor/rules/`) - Rules for Cursor IDE development environment
+- **Claude Code configuration** (`.claude/` directory) - Agent OS profile system with agents, commands, and skills
+- **Development standards** (`.agent-os/profiles/default/standards/`) - Modular standards for global, backend, frontend, and testing concerns
 - **TDD-enforced architecture** using atomic design patterns (atoms → molecules → organisms → pages)
 - **Token-optimized rule system** (~728-928 tokens per session, well under 1K limit)
 
 This is a **standards template repository**, not a runtime application. It's designed to be copied or subtree'd into other projects to establish consistent development practices.
+
+## Important Distinction
+
+- **`.cursor/rules/`** - Cursor IDE rules (not used by Claude Code)
+- **`.claude/`** - Claude Code configuration (agents, commands, skills for Claude Code)
+- **`agent-os/`** - Development standards used by both Cursor and Claude Code systems
 
 ## Common Commands
 
@@ -45,8 +51,17 @@ cat TASKS.md
 # View Agent OS version and settings
 cat agent-os/config.yml
 
-# View standards library
-ls agent-os/standards/
+# View Claude Code agents
+ls .claude/agents/agent-os/
+
+# View Claude Code commands
+ls .claude/commands/agent-os/
+
+# View Claude Code skills
+ls .claude/skills/
+
+# View development standards
+ls agent-os/profiles/default/standards/
 ```
 
 ### Validation & Deployment
@@ -66,7 +81,7 @@ git log --oneline -5
 ### Directory Structure
 
 ```
-AgentStandards/
+llm-dev-rules/
 ├── .cursor/rules/                    # Cursor IDE rule system
 │   ├── core/                         # Always-apply rules (7 files, ~728 tokens)
 │   │   └── command-execution, file-operations, quality-gates,
@@ -83,19 +98,28 @@ AgentStandards/
 │   └── project/                      # Project-specific rules
 │       └── tasks, project-management, issues
 │
-├── .claude/                          # Claude Code agent configuration
+├── .claude/                          # Claude Code Agent OS profile system
 │   ├── agents/agent-os/              # 8 agent definitions (spec-initializer, shaper, writer, verifier, product-planner, tasks-list-creator, implementer, implementation-verifier)
 │   ├── commands/agent-os/            # 7 Claude Code commands (plan-product, shape-spec, write-spec, create-tasks, orchestrate-tasks, implement-tasks, improve-skills)
-│   └── skills/                       # 18 reusable skills (backend-api, backend-models, backend-migrations, backend-queries, frontend-components, frontend-css, frontend-accessibility, frontend-responsive, testing-test-writing, + 9 global skills)
+│   └── skills/                       # 16 reusable skills (backend-api, backend-models, backend-migrations, backend-queries, frontend-components, frontend-css, frontend-accessibility, frontend-responsive, testing-test-writing, + 7 global skills)
 │
-├── agent-os/                         # Standards reference
-│   ├── standards/                    # Development standards (global, backend, frontend, testing)
-│   └── config.yml                    # Agent OS v2.1.1 configuration
+├── agent-os/                         # Agent OS profile system
+│   ├── config.yml                    # Agent OS v2.1.1 configuration
+│   └── profiles/
+│       └── default/
+│           ├── profile-config.yml    # Profile definition with inheritance
+│           ├── standards/            # Development standards (49 files)
+│           │   ├── global/ (14 files)
+│           │   ├── backend/ (8 files)
+│           │   ├── frontend/ (7 files)
+│           │   └── testing/ (3 files)
+│           ├── workflows/ (4 files)
+│           ├── agents/agents-config.yml
+│           └── commands/commands-config.yml
 │
 ├── README.md                         # Main documentation (deployment methods, rule selection)
 ├── PRD.md                           # Product Requirements Document
-├── ATOMIC-DESIGN-PLAN.md            # Atomic design architecture plan
-├── master-ide-rule.md               # Consolidated master rule for IDEs
+├── CLAUDE.md                        # Claude Code guidance (this file)
 └── TASKS.md                         # Active task list
 ```
 
@@ -149,11 +173,11 @@ These minimal, universal rules are applied to every interaction.
 
 Total per session: **~728-928 tokens** (validated to be under 1K limit).
 
-#### 4. **Multi-Agent Orchestration System**
-Located in `.claude/`, enables autonomous feature development:
+#### 4. **Claude Code Agent OS Profile System**
+Located in `.claude/` and `agent-os/profiles/default/`, enables autonomous feature development:
 
 - **Spec-driven workflow**: Specs → Tasks → Implementation → Verification
-- **8-agent pipeline**:
+- **8-agent pipeline** (`.claude/agents/agent-os/`):
   1. `spec-initializer`: Initialize specification from raw idea
   2. `spec-shaper`: Gather detailed requirements through targeted questions
   3. `spec-writer`: Create detailed specification document
@@ -163,8 +187,9 @@ Located in `.claude/`, enables autonomous feature development:
   7. `implementer`: Execute tasks following the spec
   8. `implementation-verifier`: Verify end-to-end implementation
 
-- **7 Claude Code commands** for workflow automation
-- **18 reusable skills** mapped to development concerns (backend-models, frontend-accessibility, global-validation, etc.)
+- **7 Claude Code commands** (`.claude/commands/agent-os/`) for workflow automation
+- **16 reusable skills** (`.claude/skills/`) mapped to development concerns (backend-models, frontend-accessibility, global-validation, etc.)
+- **49 development standards** (`.agent-os/profiles/default/standards/`) organized by domain
 
 ### Key Standards
 
@@ -191,29 +216,29 @@ All projects must pass:
 - No secrets in code
 - Secure error handling (no stack traces to users)
 
-### Rule Deployment Methods
+### Deployment Methods for New Projects
 
 #### Method 1: GitHub Template (Recommended for New Projects)
 ```bash
 # Use "Use this template" on GitHub
 git clone <your-new-repo>
-cp -r AgentStandards/.cursor <your-project>/
+cp -r llm-dev-rules/.cursor <your-project>/
 ```
 
 #### Method 2: Git Subtree (Recommended for Rule Updates)
 ```bash
 # One-time setup
-git subtree add --prefix=.cursor https://github.com/jaypaulb/JaypaulsCursorRules.git main --squash
+git subtree add --prefix=.cursor https://github.com/jaypaulb/llm-dev-rules.git main --squash
 
 # Update rules when new versions available
-git subtree pull --prefix=.cursor https://github.com/jaypaulb/JaypaulsCursorRules.git main --squash
+git subtree pull --prefix=.cursor https://github.com/jaypaulb/llm-dev-rules.git main --squash
 ```
 
 #### Method 3: Manual Clone (Simple Setup)
 ```bash
-git clone https://github.com/jaypaulb/JaypaulsCursorRules.git
-cp -r JaypaulsCursorRules/.cursor .
-rm -rf JaypaulsCursorRules
+git clone https://github.com/jaypaulb/llm-dev-rules.git
+cp -r llm-dev-rules/.cursor .
+rm -rf llm-dev-rules
 ```
 
 ## Language-Specific Patterns
@@ -314,6 +339,13 @@ Agent OS configuration (v2.1.1):
 - Profile settings
 - Enabled features (Claude Code commands, subagents, skills)
 
+### agent-os/profiles/default/
+The default Agent OS profile containing:
+- Profile configuration with inheritance support
+- 49 development standards organized by domain
+- 4 workflows for different development scenarios
+- Agent and command configurations
+
 ## Common Patterns
 
 ### Adding New Rules
@@ -377,10 +409,11 @@ Located in `.claude/skills/`:
 - **TDD is non-negotiable**: All projects must follow Red-Green-Refactor cycle with >80% test coverage.
 - **Atomic design is structural**: Code organization follows atoms → molecules → organisms → pages hierarchy with strict file size limits.
 - **Security is built-in**: All rules enforce OWASP Top 10 compliance and input validation.
-- **Agent OS is extensible**: New agents, commands, and skills can be added following the established patterns in `.claude/`.
+- **Agent OS is extensible**: New agents, commands, and skills can be added following the established patterns in `.claude/` and `agent-os/profiles/default/`.
+- **Cursor and Claude Code are separate**: Cursor IDE uses `.cursor/rules/`, while Claude Code uses `.claude/` configuration and `agent-os/` standards.
 
 ---
 
-**Last Updated**: 2025-11-18
-**Agent OS Version**: 2.1.1 (November 18, 2025)
-**Repository**: https://github.com/jaypaulb/JaypaulsCursorRules
+**Last Updated**: 2025-11-19
+**Agent OS Version**: 2.1.1
+**Repository**: https://github.com/jaypaulb/llm-dev-rules

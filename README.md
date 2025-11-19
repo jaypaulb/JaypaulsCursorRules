@@ -1,6 +1,13 @@
 # LLM Dev Rules - Modular Development Standards
 
-A comprehensive set of focused, reusable Cursor Rules for rapid development setup across different project types. Each rule is designed to be concise (~100 lines), focused on specific concerns, and actionable for both human developers and AI agents.
+A comprehensive development standards repository providing:
+
+- **Cursor IDE Rules** - Focused, reusable rules for consistent development across different project types
+- **Claude Code Configuration** - Agent OS profile system with agents, commands, and skills for autonomous AI development
+- **Development Standards** - 49 modular standards for global, backend, frontend, and testing concerns
+- **TDD & Atomic Design** - Test-Driven Development methodology and atomic design patterns throughout
+
+Each component is designed to be modular, focused on specific concerns, and actionable for both human developers and AI agents.
 
 ## Quick Start
 
@@ -89,51 +96,58 @@ For projects where you want to keep rules synchronized with updates:
 - Use **Git Subtree** if you want to keep rules synchronized with updates
 - Use **Manual Clone** for quick prototyping or simple projects
 
-## Rule Categories
+## Project Components
 
-### 1. Core Foundation Rules
-- **1.1 core.mdc**: Essential AI agent behavior and decision-making principles
-- **1.2 dev-env.mdc**: Environment detection and OS-specific best practices
+### 1. Cursor IDE Rules (`.cursor/rules/`)
+Rules for the Cursor IDE development environment with 37 rule files organized by category:
 
-### 2. Project Management & Workflow
-- **2.1 project-management.mdc**: High-level project management standards
-- **2.2 tasks-sop.mdc**: TASKS.md file management and task lifecycle
-- **2.3 issues-sop.mdc**: Issue tracking and GitLab/GitHub integration
+**Core Foundation Rules** (7 files, ~728 tokens)
+- command-execution, file-operations, quality-gates, error-handling, naming-conventions, tdd-methodology, code-structure
 
-### 3. Agent Collaboration Workflows
-- **3.1 local-agent-workflow.mdc**: Guidelines for AI agents working with humans
-- **3.2 background-agent-workflow.mdc**: Autonomous agent behavior for unattended tasks
+**Language-Specific Rules** (12 files)
+- python, golang, mern, cpp, typescript, rust, flutter, esp32, canvus, rest-api, graphql-api, websocket-api
 
-### 4. Language-Specific Standards
-- **4.1 python-standards.mdc**: Python development best practices (legacy - see `languages/python.mdc`)
-- **4.2 golang-standards.mdc**: Go development standards and patterns (legacy - see `languages/golang.mdc`)
-- **4.3 mern-standards.mdc**: MERN stack (MongoDB, Express, React, Node.js) guidelines (legacy - see `languages/mern.mdc`)
-- **4.4 cpp-standards.mdc**: C++ development standards (legacy - see `languages/cpp.mdc`)
+**Workflow Rules** (8 files)
+- local-agent-workflow, background-agent-workflow, ci-cd, code-review, plus specialized workflows (refactor, refresh, reflect, research)
 
-**New Atomic Structure** (`.cursor/rules-atomic/`):
-- **languages/python.mdc**: Python with TDD patterns and atomic design
-- **languages/golang.mdc**: Go with TDD patterns and atomic design
-- **languages/mern.mdc**: MERN with TDD patterns and atomic design
-- **languages/cpp.mdc**: C++ with TDD patterns and atomic design
-- **languages/flutter.mdc**: Flutter/Dart development (NEW)
-- **languages/canvus.mdc**: Canvus API development, language-agnostic (NEW)
+**Project Rules** (3 files)
+- tasks, project-management, issues
 
-### 5. Specialized Development Workflows
-- **5.1 refactor.mdc**: Guidelines for large-scale code refactoring (legacy - see `workflows/specialized/refactor.mdc`)
-- **5.2 refresh.mdc**: Bug hunting and problem-solving approaches (legacy - see `workflows/specialized/refresh.mdc`)
-- **5.3 reflect.mdc**: Post-development analysis and rule refinement (legacy - see `workflows/specialized/reflect.mdc`)
-- **5.4 research.mdc**: Project inception and research methodology (legacy - see `workflows/specialized/research.mdc`)
+### 2. Claude Code Agent OS Profile System (`.claude/` & `agent-os/profiles/default/`)
 
-**New Atomic Structure** (`.cursor/rules-atomic/`):
-- All workflow rules include TDD methodology
-- All rules enforce atomic design principles
-- Token-optimized structure
+**Agents** (8 agent definitions)
+- spec-initializer, spec-shaper, spec-writer, spec-verifier, product-planner, tasks-list-creator, implementer, implementation-verifier
+
+**Commands** (7 Claude Code commands)
+- plan-product, shape-spec, write-spec, create-tasks, orchestrate-tasks, implement-tasks, improve-skills
+
+**Skills** (16 reusable skills)
+- Global: coding-style, commenting, conventions, error-handling, validation, tech-stack
+- Backend: api, migrations, models, queries
+- Frontend: accessibility, components, css, responsive
+- Testing: test-writing
+
+### 3. Development Standards (`agent-os/profiles/default/standards/`)
+
+**49 Standards** organized by domain:
+- **Global** (14): All development domains
+- **Backend** (8): Python, Go, C++, Rust, Node.js, ESP32, Models, Migrations, Queries, API
+- **Frontend** (7): React, TypeScript, Flutter, Accessibility, Responsive, Components, CSS
+- **Testing** (3): TDD, Quality Gates, Test Writing
+
+### 4. Workflows & Configuration
+
+**Workflows** (4 files)
+- local-agent-workflow, background-agent-workflow, ci-cd-pipeline, code-review
+
+**Configuration**
+- profile-config.yml (with inheritance support)
+- agents-config.yml
+- commands-config.yml
 
 ## Rule Selection Guide
 
-> **Note**: The new atomic structure (`.cursor/rules-atomic/`) is recommended. See `RULE_SELECTION_GUIDE.md` in the atomic rules directory for detailed selection guidance.
-
-### For Python Projects (New Atomic Structure)
+### For Python Projects
 
 **Automatically Applied:**
 - All core rules (always-apply): command-execution, file-operations, quality-gates, error-handling, naming-conventions, tdd-methodology, code-structure
@@ -148,18 +162,7 @@ For projects where you want to keep rules synchronized with updates:
 - ✅ Token-optimized (~728-928 tokens per call)
 - ✅ No duplication between rules
 
-### For Python Projects (Legacy Structure)
-```
-✅ 1.1 core.mdc (always apply)
-✅ 1.2 dev-env.mdc
-✅ 4.1 python-standards.mdc
-✅ 2.1 project-management.mdc
-✅ 2.2 tasks-sop.mdc
-✅ 2.3 issues-sop.mdc
-⚠️ 3.1 local-agent-workflow.mdc (if working with AI agents)
-```
-
-### For Go Projects (New Atomic Structure)
+### For Go Projects
 
 **Automatically Applied:**
 - All core rules (always-apply)
@@ -172,7 +175,7 @@ For projects where you want to keep rules synchronized with updates:
 - ✅ Atomic design with Go package structure
 - ✅ Interface-based composition
 
-### For MERN Stack Projects (New Atomic Structure)
+### For MERN Stack Projects
 
 **Automatically Applied:**
 - All core rules (always-apply)
@@ -185,7 +188,7 @@ For projects where you want to keep rules synchronized with updates:
 - ✅ Atomic design for both frontend and backend
 - ✅ TypeScript type safety
 
-### For Background Agent Projects (New Atomic Structure)
+### For Background Agent Projects
 
 **Automatically Applied:**
 - All core rules (always-apply)
@@ -315,6 +318,11 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-**Version**: 1.0.0
-**Last Updated**: January 2024
-**Compatibility**: Cursor IDE with Cursor Rules support
+**Version**: 2.0.0
+**Last Updated**: November 2025
+**Status**: Production Ready
+**Components**:
+- Cursor IDE Rules (37 files)
+- Claude Code Agent OS Profile System (8 agents, 7 commands, 16 skills)
+- Development Standards (49 files)
+- Workflows & Configuration (4 workflows)

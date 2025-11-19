@@ -1,4 +1,4 @@
-# CursorRules - Modular Development Standards
+# LLM Dev Rules - Modular Development Standards
 
 A comprehensive set of focused, reusable Cursor Rules for rapid development setup across different project types. Each rule is designed to be concise (~100 lines), focused on specific concerns, and actionable for both human developers and AI agents.
 
@@ -13,7 +13,7 @@ A comprehensive set of focused, reusable Cursor Rules for rapid development setu
 
 2. **Copy the rules** to your project:
    ```bash
-   cp -r JaypaulsCursorRules/.cursor your-project/
+   cp -r llm-dev-rules/.cursor your-project/
    ```
 
 3. **Select appropriate rules** based on your project type (see Rule Selection Guide below)
@@ -39,7 +39,7 @@ For projects where you want to keep rules synchronized with updates:
    rm -rf .cursor/rules/
 
    # Add subtree (note: repository root contains .cursor/rules/, so we add to project root)
-   git subtree add --prefix=.cursor https://github.com/jaypaulb/JaypaulsCursorRules.git main --squash
+   git subtree add --prefix=.cursor https://github.com/jaypaulb/llm-dev-rules.git main --squash
 
    # If you get nested .cursor/rules/.cursor/rules/, fix it:
    if [ -d ".cursor/rules/.cursor" ]; then
@@ -50,7 +50,7 @@ For projects where you want to keep rules synchronized with updates:
 
 2. **Update rules** when new versions are available:
    ```bash
-   git subtree pull --prefix=.cursor https://github.com/jaypaulb/JaypaulsCursorRules.git main --squash
+   git subtree pull --prefix=.cursor https://github.com/jaypaulb/llm-dev-rules.git main --squash
 
    # If you get nested .cursor/rules/.cursor/rules/, fix it:
    if [ -d ".cursor/rules/.cursor" ]; then
@@ -65,9 +65,9 @@ For projects where you want to keep rules synchronized with updates:
 
 1. **Clone this repository** to your new project:
    ```bash
-   git clone https://github.com/jaypaulb/JaypaulsCursorRules.git
-   cp -r JaypaulsCursorRules/.cursor .
-   rm -rf JaypaulsCursorRules  # Clean up
+   git clone https://github.com/jaypaulb/llm-dev-rules.git
+   cp -r llm-dev-rules/.cursor .
+   rm -rf llm-dev-rules  # Clean up
    ```
 
 2. **Select appropriate rules** based on your project type (see Rule Selection Guide below)

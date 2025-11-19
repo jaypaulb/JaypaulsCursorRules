@@ -1,0 +1,239 @@
+# Agent OS Commands Configuration
+# ================================
+# Configuration for CLI commands with standards injection points.
+
+commands:
+  - name: project-install
+    description: Initialize new project with standards
+    usage: "agent-os project-install [--profile default] [--tech-stack nodejs-express-mongodb] <project-name>"
+    steps:
+      - action: create-project-directory
+      - action: initialize-git
+      - action: inject-standards
+        standards:
+          - "{{standards/global/*}}"
+          - "{{standards/backend/*}}"
+          - "{{standards/frontend/*}}"
+          - "{{standards/testing/*}}"
+      - action: create-config-files
+      - action: initialize-git-hooks
+    outputs:
+      - project-initialized
+      - standards-loaded
+      - config-created
+
+  - name: standards-check
+    description: Verify project compliance with standards
+    usage: "agent-os standards-check [--fix] [--report] <project-path>"
+    steps:
+      - action: load-project-standards
+        standards: "{{standards/**/*}}"
+      - action: analyze-code-structure
+        standards: "{{standards/global/code-structure.md}}"
+      - action: check-naming-conventions
+        standards: "{{standards/global/naming-conventions.md}}"
+      - action: check-error-handling
+        standards: "{{standards/global/error-handling.md}}"
+      - action: check-security
+        standards: "{{standards/global/security.md}}"
+      - action: verify-tests
+        standards: "{{standards/testing/quality-gates.md}}"
+    options:
+      - flag: "--fix"
+        description: Automatically fix issues (where possible)
+      - flag: "--report"
+        description: Generate detailed report
+      - flag: "--strict"
+        description: Fail on warnings (not just errors)
+    outputs:
+      - compliance-report
+      - violation-list
+      - fix-summary
+
+  - name: quality-gates
+    description: Run quality gate checks
+    usage: "agent-os quality-gates [--gate all|tests|lint|types|security|coverage] <project-path>"
+    context:
+      standards: "{{standards/testing/quality-gates.md}}"
+    steps:
+      - action: run-tests
+        standards: "{{standards/testing/tdd-methodology.md}}"
+        checks:
+          - tests-pass
+          - coverage-minimum: ">80%"
+          - critical-coverage: "100%"
+      - action: run-linting
+        checks:
+          - style-compliance
+          - no-warnings
+      - action: run-type-checking
+        checks:
+          - no-type-errors
+      - action: run-security-scan
+        standards: "{{standards/global/security.md}}"
+        checks:
+          - no-secrets
+          - no-vulnerabilities
+          - no-injection-risks
+      - action: verify-structure
+        standards: "{{standards/global/code-structure.md}}"
+        checks:
+          - atomic-design
+          - file-sizes
+          - organization
+    gates:
+      all:
+        - tests-gate
+        - lint-gate
+        - type-gate
+        - security-gate
+        - coverage-gate
+      tests:
+        - tests-pass
+        - coverage-threshold
+      lint:
+        - style-compliance
+      types:
+        - no-type-errors
+      security:
+        - no-vulnerabilities
+        - no-secrets
+      coverage:
+        - minimum-coverage
+    outputs:
+      - gate-status
+      - pass-fail
+      - details
+
+  - name: code-review
+    description: Run code review checks
+    usage: "agent-os code-review [--ai] [--human] <pr-number|branch>"
+    context:
+      standards: "{{standards/**/*}}"
+      workflow: "{{workflows/code-review.yml}}"
+    steps:
+      - action: load-changes
+      - action: run-automated-checks
+        standards:
+          - "{{standards/global/code-structure.md}}"
+          - "{{standards/testing/quality-gates.md}}"
+      - action: check-standards-compliance
+        standards: "{{standards/**/*}}"
+      - action: generate-review-comments
+      - action: suggest-improvements
+    options:
+      - flag: "--ai"
+        description: Run AI-assisted review (checks for standards compliance)
+      - flag: "--human"
+        description: Prepare for human review
+    outputs:
+      - review-report
+      - comments
+      - suggestions
+
+  - name: tdd-scaffold
+    description: Scaffold new feature with TDD structure
+    usage: "agent-os tdd-scaffold --type [component|service|function] --language [python|js|ts|go] <name>"
+    context:
+      standards:
+        - "{{standards/testing/tdd-methodology.md}}"
+        - "{{standards/global/code-structure.md}}"
+    steps:
+      - action: create-test-file
+        template: "{{standards/testing/tdd-methodology.md}}"
+      - action: create-source-file
+        template: "{{standards/global/code-structure.md}}"
+      - action: create-documentation-stubs
+        template: "{{standards/global/documentation.md}}"
+      - action: generate-initial-test-cases
+    outputs:
+      - test-file
+      - source-file
+      - docs-file
+
+  - name: security-scan
+    description: Run comprehensive security scan
+    usage: "agent-os security-scan [--fix] <project-path>"
+    context:
+      standards: "{{standards/global/security.md}}"
+    steps:
+      - action: scan-secrets
+      - action: scan-dependencies
+      - action: scan-code
+      - action: check-injection-risks
+      - action: verify-access-control
+    options:
+      - flag: "--fix"
+        description: Fix issues where possible (e.g., update dependencies)
+    outputs:
+      - vulnerability-report
+      - severity-list
+      - recommendations
+
+  - name: docs-generate
+    description: Generate or update documentation
+    usage: "agent-os docs-generate [--type api|readme|architecture] <project-path>"
+    context:
+      standards: "{{standards/global/documentation.md}}"
+    steps:
+      - action: analyze-codebase
+      - action: extract-documentation
+      - action: generate-docs
+      - action: update-readme
+    options:
+      - flag: "--type"
+        values: [api, readme, architecture, all]
+        description: Type of documentation to generate
+    outputs:
+      - documentation-files
+      - updated-readme
+
+  - name: migrate-standards
+    description: Migrate project to new standards version
+    usage: "agent-os migrate-standards <from-version> <to-version> <project-path>"
+    steps:
+      - action: load-current-standards
+      - action: load-new-standards
+      - action: identify-changes
+      - action: create-migration-plan
+      - action: apply-migrations
+      - action: verify-compatibility
+
+  - name: profile-switch
+    description: Switch project to different profile
+    usage: "agent-os profile-switch [--profile custom-nodejs] <project-path>"
+    steps:
+      - action: load-new-profile
+      - action: load-new-standards
+      - action: identify-conflicts
+      - action: apply-profile
+      - action: verify-standards
+
+# Global injection points for all commands
+global_injection_points:
+  - point: universal-standards
+    standards: "{{standards/global/*}}"
+    description: Applied to all commands
+
+  - point: error-handling
+    standards: "{{standards/global/error-handling.md}}"
+    description: Error handling and user feedback
+
+  - point: security
+    standards: "{{standards/global/security.md}}"
+    description: Security checks and best practices
+
+  - point: documentation
+    standards: "{{standards/global/documentation.md}}"
+    description: Documentation requirements
+
+# Exit codes
+exit_codes:
+  0: "Success"
+  1: "General error"
+  2: "Standards violation found"
+  3: "Quality gate failed"
+  4: "Security issue detected"
+  5: "Tests failed"
+  6: "Type check failed"
+  7: "Linting failed"

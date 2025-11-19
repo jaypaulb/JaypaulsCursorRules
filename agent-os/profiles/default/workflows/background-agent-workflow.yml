@@ -1,0 +1,203 @@
+# Background Agent Workflow
+# ==========================
+# Workflow for autonomous agent operation without continuous human interaction.
+# Agent operates independently but within defined standards and boundaries.
+
+name: background-agent-workflow
+version: 1.0.0
+description: Autonomous agent workflow for background tasks and CI/CD integration
+
+phases:
+  - name: initialization
+    description: Initialize autonomous agent with standards and context
+    steps:
+      - action: load-standards
+        standards: "{{standards/**/*}}"
+        description: Load all available standards into agent context
+      - action: detect-project-type
+        description: Automatically detect project type and technology stack
+      - action: load-tech-specific-standards
+        description: Load standards relevant to detected technologies
+
+  - name: task-analysis
+    description: Analyze task requirements and constraints
+    standards:
+      - "{{standards/global/code-structure.md}}"
+      - "{{standards/global/security.md}}"
+    steps:
+      - action: parse-task-specification
+        description: Parse task requirements, acceptance criteria, and constraints
+      - action: identify-affected-modules
+        description: Identify which code modules and standards apply
+      - action: verify-constraints
+        description: Verify task respects security and architectural constraints
+
+  - name: implementation
+    description: Implement task following standards
+    context:
+      - standards: "{{standards/**/*}}"
+      - primary-patterns:
+          - atomic-design: "{{standards/global/code-structure.md}}"
+          - error-handling: "{{standards/global/error-handling.md}}"
+          - security: "{{standards/global/security.md}}"
+    steps:
+      - action: design-solution
+        standards:
+          - "{{standards/global/code-structure.md}}"
+          - "{{standards/global/naming-conventions.md}}"
+        description: Design solution following atomic design principles
+      - action: implement-code
+        description: Implement solution following language-specific standards
+      - action: apply-patterns
+        patterns:
+          - error-handling: "{{standards/global/error-handling.md}}"
+          - validation: "{{standards/global/validation.md}}"
+        description: Apply error handling and validation patterns
+      - action: ensure-security
+        standards: "{{standards/global/security.md}}"
+        checklist:
+          - no-secrets-in-code
+          - input-validation
+          - injection-protection
+          - access-control
+        description: Verify security best practices
+
+  - name: quality-assurance
+    description: Autonomous quality verification
+    standards:
+      - "{{standards/testing/tdd-methodology.md}}"
+      - "{{standards/testing/quality-gates.md}}"
+    steps:
+      - action: write-tests
+        standards: "{{standards/testing/tdd-methodology.md}}"
+        requirements:
+          - test-coverage: ">80%"
+          - critical-paths: "100%"
+          - test-approach: "red-green-refactor"
+        description: Write comprehensive tests following TDD
+      - action: run-test-suite
+        description: Execute all tests and verify they pass
+      - action: run-linting
+        description: Run code linting for style compliance
+      - action: verify-type-safety
+        description: Run type checker (TypeScript, mypy, etc.)
+      - action: verify-quality-gates
+        standards: "{{standards/testing/quality-gates.md}}"
+        gates:
+          - tests-passing: required
+          - coverage-minimum: ">80%"
+          - no-linting-errors: required
+          - no-type-errors: required
+          - no-secrets: required
+        description: Verify all quality gates pass
+      - action: security-scan
+        description: Run security vulnerability scan
+
+  - name: integration
+    description: Integrate changes into main codebase
+    standards:
+      - "{{standards/global/security.md}}"
+      - "{{standards/global/documentation.md}}"
+    steps:
+      - action: update-documentation
+        standards: "{{standards/global/documentation.md}}"
+        description: Update code documentation and README
+      - action: create-commit
+        description: Create atomic git commit with standards-compliant message
+      - action: create-pull-request
+        description: Create pull request with comprehensive description
+      - action: run-ci-checks
+        description: Wait for CI pipeline to complete
+      - action: merge-if-approved
+        description: Merge to main after approval (if applicable)
+      - action: verify-deployment
+        description: Verify changes deployed successfully
+
+  - name: monitoring
+    description: Monitor deployed changes
+    steps:
+      - action: check-logs
+        description: Review deployment logs for errors
+      - action: verify-functionality
+        description: Verify functionality works as expected
+      - action: report-status
+        description: Report completion status and any issues
+
+# Autonomous decision rules
+decision_rules:
+  - rule: security-first
+    description: Always prioritize security over convenience
+    standards: "{{standards/global/security.md}}"
+
+  - rule: fail-safely
+    description: Err on side of caution - ask for human approval if uncertain
+    standards: "{{standards/global/error-handling.md}}"
+
+  - rule: preserve-compatibility
+    description: Ensure changes are backward compatible
+    constraint: "No breaking changes without explicit approval"
+
+  - rule: atomic-commits
+    description: One logical change per commit
+    constraint: "Focused, reviewable commits"
+
+  - rule: test-coverage
+    description: Maintain >80% test coverage minimum
+    standards: "{{standards/testing/quality-gates.md}}"
+    constraint: "Coverage cannot decrease"
+
+# Tech-stack specific implementations
+implementations:
+  nodejs-backend:
+    standards:
+      - "{{standards/backend/nodejs-express.md}}"
+      - "{{standards/backend/api.md}}"
+      - "{{standards/backend/models.md}}"
+      - "{{standards/backend/migrations.md}}"
+    tools:
+      - linter: eslint
+      - formatter: prettier
+      - tester: jest
+      - type-checker: tsc
+
+  react-frontend:
+    standards:
+      - "{{standards/frontend/react.md}}"
+      - "{{standards/frontend/typescript.md}}"
+      - "{{standards/frontend/accessibility.md}}"
+    tools:
+      - linter: eslint
+      - formatter: prettier
+      - tester: vitest / jest
+      - type-checker: tsc
+
+  python-backend:
+    standards:
+      - "{{standards/backend/python.md}}"
+    tools:
+      - linter: ruff
+      - formatter: black
+      - tester: pytest
+      - type-checker: mypy
+
+  golang-backend:
+    standards:
+      - "{{standards/backend/golang.md}}"
+    tools:
+      - formatter: gofmt
+      - linter: golangci-lint
+      - tester: go test
+      - security: gosec
+
+# Universal standards applied to all autonomous tasks
+universal_standards:
+  - "{{standards/global/code-structure.md}}"
+  - "{{standards/global/command-execution.md}}"
+  - "{{standards/global/error-handling.md}}"
+  - "{{standards/global/file-operations.md}}"
+  - "{{standards/global/naming-conventions.md}}"
+  - "{{standards/global/security.md}}"
+  - "{{standards/global/documentation.md}}"
+  - "{{standards/global/validation.md}}"
+  - "{{standards/testing/tdd-methodology.md}}"
+  - "{{standards/testing/quality-gates.md}}"

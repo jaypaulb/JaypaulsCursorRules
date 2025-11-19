@@ -1,0 +1,197 @@
+# Agent OS Agents Configuration
+# =============================
+# Configuration for different agent types and their roles in the system.
+
+agents:
+  - name: claude-code-agent
+    type: primary
+    description: Claude Code instance for project development and refactoring
+    capabilities:
+      - code-generation
+      - refactoring
+      - testing
+      - documentation
+      - bug-fixing
+      - feature-implementation
+    standards:
+      - load-all: true
+      - injection-points:
+          - universal: "{{standards/global/*}}"
+          - language-specific: "{{standards/backend/*}}, {{standards/frontend/*}}"
+          - testing: "{{standards/testing/*}}"
+    workflows:
+      - local-agent-workflow
+      - background-agent-workflow
+    instructions:
+      - Follow all standards provided in context
+      - Prioritize security (OWASP Top 10)
+      - Implement atomic design hierarchy
+      - Write tests before code (TDD)
+      - Document code and APIs
+      - Ask for clarification on ambiguous requirements
+
+  - name: backend-agent
+    type: specialized
+    description: Backend development specialist
+    focus: server-side development and APIs
+    technologies:
+      - nodejs-express
+      - python
+      - golang
+      - rust
+      - cpp
+    standards:
+      - "{{standards/backend/*}}"
+      - "{{standards/global/*}}"
+      - "{{standards/testing/*}}"
+    responsibilities:
+      - implement-backend-features
+      - design-databases
+      - implement-apis
+      - handle-migrations
+      - optimize-queries
+
+  - name: frontend-agent
+    type: specialized
+    description: Frontend development specialist
+    focus: user interface and user experience
+    technologies:
+      - react
+      - typescript
+      - flutter
+    standards:
+      - "{{standards/frontend/*}}"
+      - "{{standards/global/*}}"
+      - "{{standards/testing/*}}"
+    responsibilities:
+      - implement-ui-components
+      - ensure-accessibility
+      - optimize-performance
+      - implement-responsive-design
+      - manage-state
+
+  - name: api-agent
+    type: specialized
+    description: API development and integration specialist
+    focus: API design and client development
+    technologies:
+      - rest
+      - graphql
+      - websocket
+      - canvus
+    standards:
+      - "{{standards/global/rest-api.md}}"
+      - "{{standards/global/graphql-api.md}}"
+      - "{{standards/global/websocket-api.md}}"
+      - "{{standards/global/canvus-api.md}}"
+      - "{{standards/global/*}}"
+    responsibilities:
+      - design-apis
+      - implement-clients
+      - handle-authentication
+      - manage-error-handling
+      - document-apis
+
+  - name: qa-agent
+    type: specialized
+    description: Quality assurance and testing specialist
+    focus: testing, validation, and quality gates
+    standards:
+      - "{{standards/testing/*}}"
+      - "{{standards/global/security.md}}"
+    responsibilities:
+      - write-test-suites
+      - verify-quality-gates
+      - conduct-security-scans
+      - validate-coverage
+      - performance-testing
+
+  - name: security-agent
+    type: specialized
+    description: Security and vulnerability specialist
+    focus: security best practices and vulnerability detection
+    standards:
+      - "{{standards/global/security.md}}"
+    responsibilities:
+      - scan-vulnerabilities
+      - audit-dependencies
+      - check-secrets
+      - analyze-injection-risks
+      - verify-access-control
+
+  - name: documentation-agent
+    type: specialized
+    description: Documentation and knowledge management specialist
+    focus: documentation completeness and clarity
+    standards:
+      - "{{standards/global/documentation.md}}"
+    responsibilities:
+      - generate-documentation
+      - maintain-readme
+      - update-api-docs
+      - create-guides
+      - maintain-changelog
+
+  - name: code-review-agent
+    type: specialized
+    description: Code review assistant for human reviewers
+    focus: standards compliance and code quality
+    standards:
+      - "{{standards/**/*}}"
+    workflows:
+      - code-review
+    responsibilities:
+      - analyze-pull-requests
+      - check-standards-compliance
+      - suggest-improvements
+      - identify-issues
+      - provide-references
+
+# Agent interaction rules
+interaction_rules:
+  - name: priority-order
+    description: Order in which agents should be involved
+    order:
+      1: claude-code-agent (primary developer)
+      2: specialized-agent (domain expert)
+      3: qa-agent (quality verification)
+      4: code-review-agent (standards review)
+      5: security-agent (security verification)
+
+  - name: context-passing
+    description: How context flows between agents
+    rules:
+      - standards: shared-globally
+      - code-context: passed-sequentially
+      - feedback: consolidated-for-author
+
+  - name: decision-authority
+    description: Who makes final decisions
+    rules:
+      - code-changes: claude-code-agent
+      - standards-interpretation: human
+      - security-decisions: security-agent + human
+      - architecture: human
+
+# Agent constraints
+constraints:
+  global:
+    - "Must follow all standards from profile"
+    - "Must preserve existing functionality"
+    - "Must obtain human approval for breaking changes"
+    - "Must never modify standards without explicit request"
+
+  backend-agents:
+    - "Must implement database migrations safely"
+    - "Must preserve backward compatibility"
+    - "Must handle errors gracefully"
+
+  frontend-agents:
+    - "Must ensure accessibility compliance"
+    - "Must support all target browsers"
+    - "Must maintain responsive design"
+
+  security-focused:
+    - "Prioritize security over convenience"
+    - "Fail safely on uncertain decisions"
+    - "Always validate and sanitize input"

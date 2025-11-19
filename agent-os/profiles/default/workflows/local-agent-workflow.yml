@@ -1,0 +1,162 @@
+# Local Agent Workflow
+# ====================
+# Workflow for human + AI agent collaboration on projects.
+# Standards are injected based on project technology stack.
+
+name: local-agent-workflow
+version: 1.0.0
+description: Human + Claude Code agent collaborative development workflow
+
+phases:
+  - name: project-setup
+    description: Initialize project with standards
+    steps:
+      - action: detect-language
+        description: Auto-detect project languages and frameworks
+      - action: inject-standards
+        standards:
+          - "{{standards/global/*}}"
+        description: Apply universal standards to all projects
+      - action: inject-framework-standards
+        description: Apply framework-specific standards based on detected tech stack
+
+  - name: human-planning
+    description: Human developer plans the task
+    steps:
+      - action: gather-requirements
+        description: Understand task scope, constraints, and acceptance criteria
+      - action: document-plan
+        description: Create plan document with implementation approach
+      - action: review-standards
+        standards:
+          - "{{standards/global/code-structure.md}}"
+          - "{{standards/global/project-structure.md}}"
+        description: Review relevant standards before starting work
+
+  - name: code-generation
+    description: Claude Code agent generates code based on plan
+    context:
+      - standards: "{{standards/**/*}}"
+        description: Full standards library available for agent reference
+      - patterns:
+          - atomic-design: "{{standards/global/code-structure.md}}"
+          - error-handling: "{{standards/global/error-handling.md}}"
+          - security: "{{standards/global/security.md}}"
+      - language-specific:
+          - python: "{{standards/backend/python.md}}"
+          - typescript: "{{standards/frontend/typescript.md}}"
+          - react: "{{standards/frontend/react.md}}"
+          - go: "{{standards/backend/golang.md}}"
+          - rust: "{{standards/backend/rust.md}}"
+    steps:
+      - action: code-generation
+        description: Generate code following standards
+      - action: apply-atomic-design
+        standards: "{{standards/global/code-structure.md}}"
+        description: Structure code as atoms → molecules → organisms
+      - action: implement-error-handling
+        standards: "{{standards/global/error-handling.md}}"
+        description: Implement comprehensive error handling
+      - action: apply-security
+        standards: "{{standards/global/security.md}}"
+        description: Apply OWASP Top 10 security patterns
+
+  - name: testing
+    description: Write and run tests (TDD approach)
+    context:
+      - standards:
+          - "{{standards/testing/tdd-methodology.md}}"
+          - "{{standards/testing/quality-gates.md}}"
+    steps:
+      - action: write-tests
+        standards: "{{standards/testing/tdd-methodology.md}}"
+        description: Write tests before or alongside implementation
+        requirements:
+          - coverage: ">80%"
+          - approach: "red-green-refactor"
+      - action: run-tests
+        description: Execute test suite
+      - action: verify-quality-gates
+        standards: "{{standards/testing/quality-gates.md}}"
+        description: Verify quality metrics are met
+
+  - name: review-and-refine
+    description: Human reviews code and provides feedback
+    steps:
+      - action: code-review
+        standards:
+          - "{{standards/global/code-structure.md}}"
+          - "{{standards/global/naming-conventions.md}}"
+          - "{{standards/global/documentation.md}}"
+        description: Review code against standards
+      - action: provide-feedback
+        description: Human provides improvement suggestions
+      - action: refine-code
+        description: Claude refines code based on feedback
+
+  - name: deployment
+    description: Prepare and deploy changes
+    standards:
+      - "{{standards/global/security.md}}"
+      - "{{standards/global/documentation.md}}"
+    steps:
+      - action: verify-security
+        description: Run security checks
+      - action: finalize-documentation
+        description: Complete code and API documentation
+      - action: create-commit
+        description: Create atomic git commit with standards-compliant message
+      - action: merge-to-main
+        description: Merge to main branch after review
+
+# Standards applied based on technology stack
+tech_stack_standards:
+  backend:
+    nodejs:
+      - "{{standards/backend/nodejs-express.md}}"
+      - "{{standards/backend/api.md}}"
+      - "{{standards/backend/models.md}}"
+    python:
+      - "{{standards/backend/python.md}}"
+    golang:
+      - "{{standards/backend/golang.md}}"
+    rust:
+      - "{{standards/backend/rust.md}}"
+    cpp:
+      - "{{standards/backend/cpp.md}}"
+    esp32:
+      - "{{standards/backend/esp32-iot.md}}"
+
+  frontend:
+    react:
+      - "{{standards/frontend/react.md}}"
+      - "{{standards/frontend/typescript.md}}"
+      - "{{standards/frontend/accessibility.md}}"
+      - "{{standards/frontend/responsive.md}}"
+    flutter:
+      - "{{standards/frontend/flutter.md}}"
+
+  api:
+    rest:
+      - "{{standards/global/rest-api.md}}"
+    graphql:
+      - "{{standards/global/graphql-api.md}}"
+    websocket:
+      - "{{standards/global/websocket-api.md}}"
+    canvus:
+      - "{{standards/global/canvus-api.md}}"
+
+# Common patterns applied to all projects
+universal_standards:
+  - "{{standards/global/code-structure.md}}"
+  - "{{standards/global/command-execution.md}}"
+  - "{{standards/global/error-handling.md}}"
+  - "{{standards/global/file-operations.md}}"
+  - "{{standards/global/naming-conventions.md}}"
+  - "{{standards/global/security.md}}"
+  - "{{standards/global/documentation.md}}"
+  - "{{standards/global/project-structure.md}}"
+  - "{{standards/global/dev-environment.md}}"
+  - "{{standards/global/performance.md}}"
+  - "{{standards/global/conventions.md}}"
+  - "{{standards/global/validation.md}}"

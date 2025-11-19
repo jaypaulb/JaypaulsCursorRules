@@ -1,0 +1,221 @@
+# Code Review Workflow
+# =====================
+# Workflow for human and AI-assisted code review with standards enforcement.
+
+name: code-review
+version: 1.0.0
+description: Code review process with standards-based evaluation
+
+phases:
+  - name: review-request
+    description: Code review is requested
+    steps:
+      - action: load-pull-request
+        description: Load pull request details and changed files
+      - action: identify-languages
+        description: Identify languages and frameworks involved
+      - action: load-standards
+        standards: "{{standards/**/*}}"
+        description: Load relevant standards for review
+
+  - name: automated-checks
+    description: Run automated checks against standards
+    standards:
+      - "{{standards/testing/quality-gates.md}}"
+      - "{{standards/global/code-structure.md}}"
+    steps:
+      - action: verify-tests-pass
+        standards: "{{standards/testing/tdd-methodology.md}}"
+        requirements:
+          - all-tests-pass: required
+          - coverage-minimum: ">80%"
+        description: Verify test suite passes and coverage is adequate
+      - action: verify-linting
+        description: Verify code passes linting
+      - action: verify-types
+        description: Verify type checking passes
+      - action: check-structure
+        standards: "{{standards/global/code-structure.md}}"
+        description: Verify code follows atomic design structure
+      - action: check-security
+        standards: "{{standards/global/security.md}}"
+        description: Check for security issues
+      - action: verify-documentation
+        standards: "{{standards/global/documentation.md}}"
+        description: Verify code is documented
+
+  - name: standards-analysis
+    description: Analyze compliance with standards
+    context:
+      - standards: "{{standards/**/*}}"
+    checks:
+      - scope: global
+        standards:
+          - "{{standards/global/code-structure.md}}"
+          - "{{standards/global/naming-conventions.md}}"
+          - "{{standards/global/error-handling.md}}"
+          - "{{standards/global/security.md}}"
+          - "{{standards/global/documentation.md}}"
+          - "{{standards/global/file-operations.md}}"
+          - "{{standards/global/command-execution.md}}"
+        items:
+          - Atomic design hierarchy (atoms/molecules/organisms)
+          - Naming conventions compliance
+          - Error handling patterns
+          - Security best practices
+          - Code documentation completeness
+          - File operation safety
+          - Command execution safety
+
+      - scope: language-specific
+        description: Check language-specific standards
+        examples:
+          - python: "{{standards/backend/python.md}}"
+          - typescript: "{{standards/frontend/typescript.md}}"
+          - react: "{{standards/frontend/react.md}}"
+          - golang: "{{standards/backend/golang.md}}"
+
+      - scope: api
+        description: Check API standards if applicable
+        standards:
+          - "{{standards/global/rest-api.md}}"
+          - "{{standards/global/graphql-api.md}}"
+          - "{{standards/global/websocket-api.md}}"
+
+  - name: detailed-review
+    description: AI and human perform detailed code review
+    reviewer-roles:
+      - ai-assistant: Automated standards checking and pattern analysis
+      - human: Domain expertise, architecture decisions, business logic
+    steps:
+      - action: ai-review
+        description: AI reviews code against standards
+        focus:
+          - standards-compliance
+          - code-patterns
+          - error-handling
+          - security
+      - action: human-review
+        description: Human reviews for architecture and logic
+        focus:
+          - design-quality
+          - business-logic-correctness
+          - performance-implications
+          - maintainability
+      - action: ai-suggestions
+        standards: "{{standards/**/*}}"
+        description: AI suggests improvements based on standards
+      - action: discussion
+        description: Reviewers discuss changes and feedback
+
+  - name: feedback
+    description: Provide feedback to author
+    steps:
+      - action: categorize-comments
+        categories:
+          - blocker: "Must fix before merge"
+          - important: "Should fix before merge"
+          - suggestion: "Consider fixing"
+          - question: "Clarification needed"
+      - action: provide-standards-references
+        description: Reference specific standards for each comment
+      - action: suggest-improvements
+        description: Suggest code improvements with examples
+      - action: request-changes
+        description: Request changes or approve
+
+  - name: resolution
+    description: Author addresses review feedback
+    steps:
+      - action: author-updates-code
+        description: Author updates code based on feedback
+      - action: verify-standards-compliance
+        standards: "{{standards/**/*}}"
+        description: Verify updates maintain standards compliance
+      - action: re-request-review
+        description: Re-request review after changes
+      - action: update-comments
+        description: Mark resolved comments as addressed
+
+  - name: approval
+    description: Final approval process
+    gates:
+      - automated-checks-pass: required
+      - standards-compliant: required
+      - human-approval: required
+      - no-blockers: required
+    steps:
+      - action: verify-all-gates
+        description: Verify all review gates have passed
+      - action: approve-pr
+        description: Approve pull request
+      - action: prepare-merge
+        description: Prepare PR for merging
+
+  - name: merge
+    description: Merge code to main branch
+    standards:
+      - "{{standards/global/conventions.md}}"
+    steps:
+      - action: run-final-ci
+        description: Run full CI/CD pipeline one last time
+      - action: squash-or-rebase
+        description: Squash or rebase commits as appropriate
+      - action: merge-to-main
+        description: Merge to main branch
+      - action: cleanup
+        description: Delete feature branch
+      - action: notify-team
+        description: Notify team of merge
+
+# Review checklist
+checklist:
+  structure:
+    - item: "Follows atomic design (atoms/molecules/organisms)"
+      standard: "{{standards/global/code-structure.md}}"
+    - item: "Function/class sizes appropriate"
+      standard: "{{standards/global/code-structure.md}}"
+    - item: "Clear separation of concerns"
+      standard: "{{standards/global/code-structure.md}}"
+
+  naming:
+    - item: "Variables have clear, descriptive names"
+      standard: "{{standards/global/naming-conventions.md}}"
+    - item: "Functions follow naming conventions"
+      standard: "{{standards/global/naming-conventions.md}}"
+    - item: "No magic numbers or unclear abbreviations"
+      standard: "{{standards/global/naming-conventions.md}}"
+
+  errors:
+    - item: "Proper error handling implemented"
+      standard: "{{standards/global/error-handling.md}}"
+    - item: "Meaningful error messages for users"
+      standard: "{{standards/global/error-handling.md}}"
+    - item: "Errors logged appropriately"
+      standard: "{{standards/global/error-handling.md}}"
+
+  security:
+    - item: "No secrets in code"
+      standard: "{{standards/global/security.md}}"
+    - item: "Input validation implemented"
+      standard: "{{standards/global/security.md}}"
+    - item: "No SQL/XSS/injection vulnerabilities"
+      standard: "{{standards/global/security.md}}"
+    - item: "Access control verified"
+      standard: "{{standards/global/security.md}}"
+
+  testing:
+    - item: "Tests pass locally and in CI"
+      standard: "{{standards/testing/tdd-methodology.md}}"
+    - item: "Test coverage adequate (>80%)"
+      standard: "{{standards/testing/quality-gates.md}}"
+    - item: "Critical paths have 100% coverage"
+      standard: "{{standards/testing/quality-gates.md}}"
+
+  documentation:
+    - item: "Functions/classes documented"
+      standard: "{{standards/global/documentation.md}}"
+    - item: "Complex logic explained"
+      standard: "{{standards/global/documentation.md}}"
+    - item: "README updated if applicable"
+      standard: "{{standards/global/documentation.md}}"

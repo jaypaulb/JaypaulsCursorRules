@@ -1,0 +1,157 @@
+# CI/CD Pipeline Workflow
+# ========================
+# Workflow for continuous integration and continuous deployment.
+
+name: ci-cd-pipeline
+version: 1.0.0
+description: Automated CI/CD pipeline with standards enforcement
+
+phases:
+  - name: trigger
+    description: CI/CD pipeline triggered by code changes
+    steps:
+      - action: detect-changes
+        description: Detect what changed (files, directories, languages)
+      - action: load-standards
+        standards: "{{standards/**/*}}"
+        description: Load relevant standards for changed code
+
+  - name: code-quality
+    description: Verify code quality and standards compliance
+    standards:
+      - "{{standards/global/code-structure.md}}"
+      - "{{standards/testing/quality-gates.md}}"
+    steps:
+      - action: lint-code
+        description: Run linters for style and best practices
+      - action: check-types
+        description: Run type checker (TypeScript, mypy, etc.)
+      - action: check-formatting
+        description: Verify code formatting compliance
+      - action: check-security
+        description: Run security scanners and secret detection
+      - action: verify-structure
+        standards: "{{standards/global/code-structure.md}}"
+        description: Verify atomic design structure compliance
+
+  - name: testing
+    description: Run automated test suite
+    standards:
+      - "{{standards/testing/tdd-methodology.md}}"
+      - "{{standards/testing/quality-gates.md}}"
+    steps:
+      - action: run-unit-tests
+        description: Run unit tests
+      - action: run-integration-tests
+        description: Run integration tests
+      - action: check-coverage
+        requirements:
+          - minimum: ">80%"
+          - critical: "100%"
+        description: Verify test coverage meets requirements
+      - action: run-e2e-tests
+        description: Run end-to-end tests (if applicable)
+
+  - name: performance
+    description: Check performance and optimization
+    standards:
+      - "{{standards/global/performance.md}}"
+    steps:
+      - action: profile-code
+        description: Profile code for performance bottlenecks
+      - action: check-bundle-size
+        description: Check bundle size (frontend only)
+      - action: benchmark-critical-paths
+        description: Benchmark critical code paths
+
+  - name: security
+    description: Comprehensive security verification
+    standards:
+      - "{{standards/global/security.md}}"
+    steps:
+      - action: scan-dependencies
+        description: Scan dependencies for known vulnerabilities
+      - action: check-secrets
+        description: Verify no secrets committed
+      - action: analyze-injection-risks
+        description: Check for injection vulnerabilities
+      - action: verify-access-control
+        description: Verify access control implementation
+
+  - name: approval
+    description: Human approval for merge (if configured)
+    steps:
+      - action: request-review
+        description: Request human code review
+      - action: wait-for-approval
+        description: Wait for human approval
+      - action: check-approval-status
+        description: Check if all gates passed
+
+  - name: deployment
+    description: Deploy to production
+    standards:
+      - "{{standards/global/security.md}}"
+      - "{{standards/global/documentation.md}}"
+    steps:
+      - action: build-artifacts
+        description: Build deployment artifacts
+      - action: verify-build
+        description: Verify build succeeds
+      - action: deploy-to-staging
+        description: Deploy to staging environment first
+      - action: run-smoke-tests
+        description: Run smoke tests on staging
+      - action: deploy-to-production
+        description: Deploy to production
+      - action: verify-deployment
+        description: Verify deployment succeeded
+      - action: monitor-health
+        description: Monitor application health
+
+  - name: rollback
+    description: Rollback procedures if deployment fails
+    steps:
+      - action: detect-failure
+        description: Detect deployment failure
+      - action: rollback-deployment
+        description: Rollback to previous version
+      - action: notify-team
+        description: Notify team of rollback
+      - action: investigate-failure
+        description: Investigate root cause
+
+# Gate status definitions
+gates:
+  - name: code-quality-gate
+    required: true
+    checks:
+      - linting-pass
+      - formatting-pass
+      - type-checking-pass
+
+  - name: security-gate
+    required: true
+    checks:
+      - no-secrets
+      - no-vulnerabilities
+      - injection-safe
+
+  - name: testing-gate
+    required: true
+    checks:
+      - all-tests-pass
+      - coverage-minimum
+      - e2e-tests-pass
+
+  - name: performance-gate
+    required: false
+    checks:
+      - no-performance-regression
+      - bundle-size-acceptable
+
+  - name: approval-gate
+    required: true
+    checks:
+      - human-approval
+      - all-previous-gates-pass

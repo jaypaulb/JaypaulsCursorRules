@@ -1,13 +1,67 @@
 version: 2.1.1
-last_compiled: 2025-11-18 23:35:08
+last_compiled: 2025-11-19 updated-for-profiles
 
 # ================================================
-# Compiled with the following settings:
+# Agent OS Configuration with Profile System
+#
+# This configuration enables the full Agent OS profile system with:
+# - Standards injection into workflows and commands
+# - Multiple agent types (primary, specialized)
+# - Workflow management (local, background, CI/CD, code-review)
+# - Command-line utilities with standards enforcement
+# - Technology stack selection for projects
 #
 # To change these settings, run ~/agent-os/scripts/project-update.sh to re-compile your project with the new settings.
 # ================================================
+
+# Profile system configuration
 profile: default
+profile_path: ./profiles/default
+profile_config: ./profiles/default/profile-config.yml
+
+# Standards configuration
+standards:
+  enabled: true
+  path: ./profiles/default/standards
+  patterns:
+    global: ./profiles/default/standards/global/**/*.md
+    backend: ./profiles/default/standards/backend/**/*.md
+    frontend: ./profiles/default/standards/frontend/**/*.md
+    testing: ./profiles/default/standards/testing/**/*.md
+
+# Workflows configuration
+workflows:
+  enabled: true
+  path: ./profiles/default/workflows
+  types:
+    - local-agent-workflow.yml
+    - background-agent-workflow.yml
+    - ci-cd-pipeline.yml
+    - code-review.yml
+
+# Agents configuration
+agents:
+  enabled: true
+  path: ./profiles/default/agents
+  config: ./profiles/default/agents/agents-config.yml
+
+# Commands configuration
+commands:
+  enabled: true
+  path: ./profiles/default/commands
+  config: ./profiles/default/commands/commands-config.yml
+
+# Claude Code integration
 claude_code_commands: true
 use_claude_code_subagents: true
-agent_os_commands: false
 standards_as_claude_code_skills: true
+
+# Agent OS commands integration
+agent_os_commands: false  # Can be enabled for native Agent OS command support
+
+# Metadata
+metadata:
+  created: 2025-11-19
+  source: Cursor IDE rules conversion to Agent OS profile system
+  standards_version: 1.0.0
+  profile_system_version: 2.1.1

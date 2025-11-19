@@ -1,0 +1,109 @@
+# Agent OS Default Profile Configuration
+# ========================================
+#
+# This is the base profile for Agent OS installations.
+# All other profiles inherit from this default profile.
+#
+# Profile: default
+# Version: 1.0.0
+# Last Updated: 2025-11-19
+
+name: default
+version: 1.0.0
+description: Default Agent OS profile with comprehensive standards for all development types
+
+# Parent profile - not specified as this is the base profile
+inherits_from: null
+
+# Standards organization and injection
+standards:
+  # Global standards applied to all projects and agents
+  global_patterns:
+    - global/**/*.md
+
+  # Backend-specific standards
+  backend_patterns:
+    - backend/**/*.md
+
+  # Frontend-specific standards
+  frontend_patterns:
+    - frontend/**/*.md
+
+  # Testing and quality standards
+  testing_patterns:
+    - testing/**/*.md
+
+# Technology stack defaults for new projects
+default_stack:
+  backend:
+    runtime: nodejs
+    framework: express
+    database: mongodb
+  frontend:
+    framework: react
+    language: typescript
+  testing:
+    unit: jest
+    e2e: playwright
+
+# Excluded standards (allow customization by child profiles)
+exclude_inherited_files: []
+
+# Available technology stacks for project creation
+tech_stacks:
+  nodejs-express-mongodb:
+    name: Node.js + Express + MongoDB
+    backend: [nodejs-express, api, models, migrations, queries]
+    frontend: [react, typescript, accessibility, responsive]
+    global: [all]
+    testing: [all]
+
+  python-django:
+    name: Python + Django
+    backend: [python]
+    frontend: [react, typescript]
+    global: [all]
+    testing: [all]
+
+  go-rest:
+    name: Go + REST API
+    backend: [golang, api, models]
+    frontend: [react, typescript]
+    global: [all]
+    testing: [all]
+
+  full-stack:
+    name: Full Stack (All Technologies)
+    backend: [all]
+    frontend: [all]
+    global: [all]
+    testing: [all]
+
+# Workflow definitions
+workflows:
+  - local-agent-workflow
+  - background-agent-workflow
+  - ci-cd-pipeline
+  - code-review
+
+# Roles available in this profile
+roles:
+  - backend-engineer
+  - frontend-engineer
+  - fullstack-engineer
+  - qa-engineer
+  - devops-engineer
+
+# Commands available in this profile
+commands:
+  - project-install
+  - standards-check
+  - quality-gates
+  - code-review
+
+# Metadata
+metadata:
+  created_at: 2025-11-19
+  created_by: conversion_system
+  source: Cursor IDE rules conversion
+  conversion_version: 1.0
